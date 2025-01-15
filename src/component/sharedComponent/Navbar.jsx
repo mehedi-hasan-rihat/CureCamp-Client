@@ -83,7 +83,7 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <NavLink to="/auth/signup" className="">
+          <NavLink to="/auth/signin" className="">
             <Button className="bg-transparent border border-primary  font-semibold px-5 text-black hover:text-white">
               Join Us
             </Button>

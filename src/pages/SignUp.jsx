@@ -3,9 +3,11 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { ImgURL } from "../utils/imgUpload";
 import useAuth from "../hook/useAuth";
-
+import { Link, useNavigate } from "react-router-dom";
+import {toast} from 'react-hot-toast';
 export default function SignUp() {
-  const { createUser, setUser, updateUserProfile, user } = useAuth();
+  const navigate = useNavigate()
+  const { createUser, updateUserProfile, user } = useAuth();
   console.log(user)
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
@@ -16,7 +18,12 @@ export default function SignUp() {
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
-      updateUserProfile(data.name, photoURL).catch((error) =>
+      updateUserProfile(data.name, photoURL)
+      .then(()=>{
+        navigate('/')
+        toast.success('Successfully Signup!')
+      })
+      .catch((error) =>
         console.log(error)
       );
     });
@@ -123,9 +130,9 @@ export default function SignUp() {
 
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Already have an account?
-                    <a href="#" className="text-gray-700 underline">
-                      Log in
-                    </a>
+                    <Link to='/auth/signin' className="text-gray-700 ml-1 underline">
+                     Signin
+                    </Link>
                     .
                   </p>
                 </div>
