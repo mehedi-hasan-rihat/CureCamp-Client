@@ -1,4 +1,4 @@
-import * as React from "react";
+import { React, useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import {
   Card,
@@ -16,63 +16,85 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Container from "../sharedComponent/Container";
+import useAuth from "../../hook/useAuth";
+import useAxiosPublic from "../../hook/useAxiosPublic";
 
 export default function Review() {
+  const [reviews, setReviews] = useState([]);
+  const axiosPublic = useAxiosPublic();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      axiosPublic("/reviews")
+        .then((res) => {
+          console.log(res.data);
+          setReviews(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [user]);
+
   return (
     <Container>
-      <div className="flex gap-14 h-80 text-center my-20 overflow-hidden">
-        <div className="text-left">
-          <h3 className="text-3xl font-semibold secondary-font">
-            Your Feedback, Our Inspiration
-          </h3>
-          <p className="text-justify mt-2 font-medium">
-            Hear what others have to say! Our review section showcases genuine
-            feedback from people who have experienced our services. From
-            heartfelt testimonials to constructive insights, these reviews
-            reflect the trust and satisfaction of our valued users. Explore the
-            stories, get inspired, and see how we strive to deliver exceptional
-            experiences every day. Your feedback matters to us!
-          </p>
+      <div className="bg-gradient-to-r from-primary to-btn-hover p-8 rounded-xl my-28">
+        <div className="flex flex-col items-center justify-center gap-14 text-center my-20 ">
+          <div className="  flex flex-col items-center justify-center max-w-2xl">
+            <h3 className="text-3xl text-white font-semibold secondary-font">
+              Hear From Our Happy Campers
+            </h3>
+            <p className="mt-2 font-medium text-white/80">
+              Discover what makes Madi Camp special through the words of our
+              visitors. From serene landscapes to unforgettable adventures, our
+              campers share their stories of joy and relaxation. Join the
+              journey and create your own magical memories!
+            </p>
+          </div>
+          <Carousel className="w-full sm:max-w-[70%] mx-auto">
+            <CarouselContent className="-ml-1">
+              {reviews?.map((review) => (
+                <CarouselItem
+                  key={review?._id}
+                  className="pl-1 basis-10/12 md:basis-1/2 xl:basis-1/3 h-full"
+                >
+                  <div className="px-1 h-52">
+                    <Card className="h-full p-4">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={review?.profile_image}
+                          alt="Profile"
+                          className="h-8 w-8 object-center rounded-full"
+                        />
+                        <div>
+                          <p className="text-md font-semibold -mb-2">
+                            {review?.name}
+                          </p>
+                          <ReactStars
+                            count={5}
+                            value={review?.rating}
+                            size={16}
+                            activeColor="#ffd700"
+                          />
+                        </div>
+                      </div>
+                      <div className="text-start mt-5 text-sm">
+                        <span className="text-md h-full">
+                          "{review?.review}"
+                        </span>
+                      </div>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="left-14 -bottom-6 absolute">
+              <CarouselPrevious className=" bg-slate-200 ring-1" />
+              <CarouselNext className=" bg-slate-200 ring-1" />
+            </div>
+          </Carousel>
         </div>
-        <Carousel className="w-full max-w-[70%] mx-auto  ">
-          <CarouselContent className="-ml-1">
-            {Array.from({ length: 15 }).map((_, index) => (
-              <CarouselItem
-                key={index}
-                className="pl-1 md:basis-1/2 lg:basis-1/3 h-full"
-              >
-                <div className="px-1 h-80">
-                  <Card className="h-full p-4">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/15/Cat_August_2010-4.jpg"
-                        alt=""
-                        className="h-8 w-8 object-center rounded-full"
-                      />
-
-                   <div className="">
-                   <p className="text-md font-semibold -mb-2">Mehedi Hasan</p>
-                   <ReactStars count={5} value={3} size={16} activeColor="#ffd700" />
-                   </div>
-                    </div>
-
-                    <div className=" text-start mt-5 text-sm">
-                      <span className="text-md  h-full">
-                        "Hear what others have to say! Our review section
-                        showcases genuine feedback from people who have
-                        experienced our services. From heartfelt testimonials to
-                        constructive insights, these reviews reflect the trust
-                        and satisfaction of our valued"
-                      </span>
-                    </div>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-5" />
-          <CarouselNext className="right-5" />
-        </Carousel>
       </div>
     </Container>
   );

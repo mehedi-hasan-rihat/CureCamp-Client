@@ -14,7 +14,7 @@ export default function FAQ() {
           <div className="w-full flex items-center">
           <div className="divide-y divide-gray-100 rounded-xl border border-gray-100 bg-white/50 flex-1">
           {loop.map((data) => {
-           return   <details
+           return   <details key={data}
               className="group p-6 [&_summary::-webkit-details-marker]:hidden"
             
             >
