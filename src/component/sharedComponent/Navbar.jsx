@@ -2,8 +2,20 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Container from "./Container";
 import { Button } from "@/components/ui/button";
+import useAuth from "../../hook/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
+  const { user,   logOut } = useAuth();
   return (
     <Container>
       {" "}
@@ -31,18 +43,52 @@ export default function Navbar() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/available-campain" className={({ isActive }) =>
-          `p-1 hover:text-primary ${
-            isActive ? "text-primary text-[16px]" : ""
-          }`}>Available Camp</NavLink>
+              <NavLink
+                to="/available-campain"
+                className={({ isActive }) =>
+                  `p-1 hover:text-primary ${
+                    isActive ? "text-primary text-[16px]" : ""
+                  }`
+                }
+              >
+                Available Camp
+              </NavLink>
             </li>
           </ul>
         </div>
-        <div className="">
-          <Button className="bg-transparent border border-primary  font-semibold px-5 text-black hover:text-white">
-            Join Us
-          </Button>
-        </div>
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <img
+                src={user?.photoURL}
+                referrerPolicy="no-referrer"
+                alt="UserPhoto"
+                className="w-10 h-10 rounded-full object-center object-cover"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-60 mr-3 font-semibold ">
+              <DropdownMenuLabel className='text-xl'>  {user?.displayName}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <NavLink><DropdownMenuItem className='text-md'>
+                  Dashboard
+                </DropdownMenuItem></NavLink>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+          <div className="" onClick={()=> logOut()}>
+          <DropdownMenuItem  className='text-md'>
+                Log out
+              </DropdownMenuItem>
+          </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <NavLink to="/auth/signup" className="">
+            <Button className="bg-transparent border border-primary  font-semibold px-5 text-black hover:text-white">
+              Join Us
+            </Button>
+          </NavLink>
+        )}
       </nav>
     </Container>
   );
