@@ -17,7 +17,7 @@ export default function CampCard({ camp }) {
     participantCount,
     location,
     time,
-    description,
+    description,_id
   } = camp || {};
   return (
   <div className="">
@@ -86,7 +86,7 @@ export default function CampCard({ camp }) {
       </div>
 
         <div className="text-end mt-5">
-        <Link to='/available-campain' className="py-1 px-3 bg-transparent outline outline-2 outline-primary text-[16px] hover:bg-primary duration-300 rounded hover:text-white font-semibold">Details</Link>
+        <Link to={`/camp-details/${_id}`} className="py-1 px-3 bg-transparent outline outline-2 outline-primary text-[16px] hover:bg-primary duration-300 rounded hover:text-white font-semibold">Details</Link>
         </div>
       </div>
     </div>

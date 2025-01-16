@@ -7,6 +7,7 @@ import AvailableCamp from "../pages/AvailableCamp";
 import Authlayout from "../layout/Authlayout";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
+import CampDetails from "../pages/CampDetails";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
        {
         path : '/available-campain',
         element : <AvailableCamp/>
+       },
+       {
+        path : '/camp-details/:id',
+        element : <CampDetails/>
        }
       ]},
       {

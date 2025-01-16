@@ -5,6 +5,7 @@ import { CiCalendarDate } from "react-icons/ci";
 import { BsPeople } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
 import { CiLocationOn } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 export default function PopularCard({ campData }) {
   const {
@@ -15,7 +16,7 @@ export default function PopularCard({ campData }) {
     image,
     participantCount,
     location,
-    time
+    time,_id
   } = campData || {};
   return (
     <div className="rounded-lg p-2 hover:shadow-md border border-gray-200 duration-300 shadow-indigo-100 flex flex-col gap-5">
@@ -69,7 +70,7 @@ export default function PopularCard({ campData }) {
         </div>
       </div>
 
-      <div className="flex-1 xl:px-3">
+      <Link to={`/camp-details/${_id}`} className="flex-1 xl:px-3">
         <div className="max-w-48 group cursor-pointer flex items-center rounded-md  transition-colors hover:bg-transparent focus:outline-none focus:ring  ">
           <span className=" font-mono  transition-colors group-hover:text-primary ">
             See Details
@@ -92,7 +93,7 @@ export default function PopularCard({ campData }) {
             </svg>
           </span>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }
