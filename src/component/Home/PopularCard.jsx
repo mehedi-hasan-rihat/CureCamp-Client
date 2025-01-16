@@ -5,7 +5,7 @@ import { CiCalendarDate } from "react-icons/ci";
 import { BsPeople } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
 import { CiLocationOn } from "react-icons/ci";
-import { Button } from "@/components/ui/button";
+
 export default function PopularCard({ campData }) {
   const {
     campName,
@@ -29,10 +29,10 @@ export default function PopularCard({ campData }) {
         <div className=" xl:px-3">
           <h3 className="text-md font-semibold">{campName}</h3>
           <div className="flex flex-col gap-1 mt-1">
-            <p className="flex gap-2 items-center text-[14px] bg-slate-200/80 w-max rounded pl-1 font-semibold">
+            <div className="flex gap-2 items-center text-[14px] bg-slate-200/80 w-max rounded pl-1 font-semibold">
               <FaUserDoctor />
               <p className="pr-3">{healthcareProfessional}</p>
-            </p>
+            </div>
 
             <p className="flex flex-1 gap-2 items-center text-[12px] bg-slate-200/80 w-max rounded pl-1 font-mono">
               {" "}

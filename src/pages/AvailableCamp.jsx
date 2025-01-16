@@ -6,7 +6,7 @@ export default function () {
   return (
     <Container>
       {" "}
-      <div className="min-h-[80vh] py-20">
+      <div className=" py-20">
         <AvailableCamp />
       </div>
     </Container>
