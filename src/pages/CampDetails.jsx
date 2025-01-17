@@ -6,7 +6,6 @@ import { FaUserDoctor } from "react-icons/fa6";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -15,20 +14,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAuth from "../hook/useAuth";
+import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 export default function CampDetails() {
   const { id } = useParams();
   const [camp, setCamp] = useState([]);
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
-  useEffect(() => {
-    axiosPublic(`/camp-details/${id}`)
-      .then((res) => {
-        setCamp(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+
+  const { data, refetch } = useQuery({
+    queryKey: ["camp", id],
+    queryFn: async () => {
+      const response = await axiosPublic(`/camp-details/${id}`);
+      setCamp(response.data);
+      return response.data;
+    },
+  });
   const {
     campName,
     campFees,
@@ -39,7 +41,29 @@ export default function CampDetails() {
     location,
     time,
     description,
+    _id,
   } = camp || {};
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (values) => {
+    const participantData = {
+      ...values,
+      campainId: _id,
+    };
+    const { data } = await axiosPublic.post(
+      "/register-campain",
+      participantData
+    );
+    if (data.insertedId) {
+      toast.success("Succesfully Registerd the Campain !")
+      refetch();
+    }
+  };
+
   return (
     <Container>
       <div className="min-h-[90vh] flex items-center my-10 max-w-xl xl:max-w-full mx-auto">
@@ -108,7 +132,13 @@ export default function CampDetails() {
                         </span>
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-[580px] overflow-y-auto max-h-[50vh] rounded-md">
-                        <form className="space-y-4 mx-auto w-full ">
+                        <DialogHeader>
+                          <DialogTitle>Register Camp</DialogTitle>
+                        </DialogHeader>
+                        <form
+                          onSubmit={handleSubmit(onSubmit)}
+                          className="space-y-4 mx-auto w-full "
+                        >
                           <div className="flex  gap-3">
                             {" "}
                             <div className="w-full">
@@ -151,11 +181,11 @@ export default function CampDetails() {
                                 id="participantEmail"
                                 defaultValue={user?.email}
                                 readOnly
+                                {...register("participantEmailName")}
                                 className="mt-1"
                               />
                             </div>
                           </div>
-
 
                           <div className="flex flex-col sm:flex-row gap-3">
                             {" "}
@@ -165,6 +195,7 @@ export default function CampDetails() {
                                 id="location"
                                 defaultValue={location}
                                 readOnly
+                                {...register("participantEmail")}
                                 className="mt-1"
                               />
                             </div>
@@ -181,14 +212,14 @@ export default function CampDetails() {
                             </div>
                           </div>
 
-                         
                           <div className="flex flex-col sm:flex-row  gap-3">
                             {" "}
-                            <di className="w-full"v>
+                            <di className="w-full" v>
                               <Label htmlFor="age">Age</Label>
                               <Input
                                 id="age"
                                 type="number"
+                                {...register("participantAge")}
                                 placeholder="Enter your age"
                                 className="mt-1"
                               />
@@ -198,6 +229,7 @@ export default function CampDetails() {
                               <Input
                                 id="phone"
                                 type="tel"
+                                {...register("participantPhone")}
                                 placeholder="Enter your phone number"
                                 className="mt-1"
                               />
@@ -210,9 +242,12 @@ export default function CampDetails() {
                               <Label htmlFor="gender">Gender</Label>
                               <select
                                 id="gender"
+                                {...register("participantGender")}
                                 className="mt-1 w-full h-9 border rounded"
                               >
-                                <option disabled value="">Select Gender</option>
+                                <option disabled value="">
+                                  Select Gender
+                                </option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="other">Other</option>
@@ -223,6 +258,7 @@ export default function CampDetails() {
                                 Emergency Contact
                               </Label>
                               <Input
+                                {...register("participantemergencyContact")}
                                 id="emergencyContact"
                                 type="tel"
                                 placeholder="Enter emergency contact number"
@@ -230,6 +266,10 @@ export default function CampDetails() {
                               />
                             </div>
                           </div>
+
+                        <DialogTrigger>  <button className="text-white bg-primary px-5 py-2 rounded">
+                            Submit
+                          </button></DialogTrigger>
                         </form>
                       </DialogContent>
                     </Dialog>

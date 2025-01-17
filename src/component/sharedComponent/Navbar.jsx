@@ -70,7 +70,7 @@ export default function Navbar() {
               <DropdownMenuLabel className='text-xl'>  {user?.displayName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <NavLink><DropdownMenuItem className='text-md'>
+                <NavLink to={'dashboard'}><DropdownMenuItem className='text-md'>
                   Dashboard
                 </DropdownMenuItem></NavLink>
               </DropdownMenuGroup>
