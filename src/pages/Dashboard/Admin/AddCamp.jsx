@@ -2,7 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
 import toast from "react-hot-toast";
-
+import { Input } from "@/components/ui/input";
+import { ImgURL } from "../../../utils/imgUpload";
 export default function AddCamp() {
   const axiosPublic = useAxiosPublic()
   const {
@@ -13,16 +14,17 @@ export default function AddCamp() {
 
   const onSubmit = async (data) => {
     const time = data.startTime.concat(" - ", data.endTime);
-    const { startTime, endTime, ...rest } = data;
-    const participantCoount = 0;
+    const { startTime, endTime,image, ...rest } = data;
+    const participantCount = 0;
+    const imgURL = await ImgURL(data.image[0])
     const campData = {
       ...rest,
       time,
-      participantCoount,
+      image:imgURL,
+      participantCount,
     };
     console.log(campData);
    const { data : response} = await axiosPublic.post('add-camp',campData)
-   console.log(response);
    if(response.insertedId){
     toast.success("Data Added Succesfully")
    }
@@ -62,17 +64,16 @@ export default function AddCamp() {
               htmlFor="image"
               className="block text-sm font-medium text-gray-700"
             >
-              Camp Image URL
+              Camp Image
             </label>
-            <input
-              id="campImage"
-              type="url"
-              {...register("campImage", { required: "Image URL is required" })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-            {errors.campImage && (
-              <p className="text-red-500 text-sm">{errors.campImage.message}</p>
-            )}
+            <Input
+                    className="text-sm mt-1 cursor-pointer"
+                    type="file"
+                    name="image"
+                    id="image"
+                    accept="image/*"
+                    {...register("image",  {  required: "Required",})}
+                  />
           </div>
 
           {/* Camp Fees */}
@@ -200,6 +201,8 @@ export default function AddCamp() {
               </p>
             )}
           </div>
+
+         
 
           {/* Description */}
           <div className="col-span-1 md:col-span-2">

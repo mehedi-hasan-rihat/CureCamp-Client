@@ -11,9 +11,8 @@ export default function SignUp() {
   console.log(user)
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
-    console.log(data.image[0]);
     const photoURL = await ImgURL(data.image[0]);
-    console.log(photoURL);
+ 
 
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
