@@ -1,21 +1,39 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../../hook/useAxiosPublic";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ImgURL } from "../../../utils/imgUpload";
-export default function AddCamp() {
-  const axiosPublic = useAxiosPublic()
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { ImgURL } from "../../utils/imgUpload";
+import useAxiosPublic from "../../hook/useAxiosPublic";
+import toast from "react-hot-toast";
+
+export default function UpdateCampain({ camp }) {
   const {
-    register,
+    campName,
+    campFees,
+    date,
+    healthcareProfessional,
+    image,
+    participantCount,
+    location,
+    time,
+    description,
+    startTime,
+    endTime,
+    _id,
+  } = camp || {};
+
+  // console.log(camp);
+  const {
     handleSubmit,
+    register,
     formState: { errors },
   } = useForm();
+  const axiosPublic = useAxiosPublic()
 
   const onSubmit = async (data) => {
     const time = data.startTime.concat(" - ", data.endTime);
     const {image, ...rest } = data;
-    const participantCount = 0;
     const imgURL = await ImgURL(data.image[0])
     const campData = {
       ...rest,
@@ -24,20 +42,23 @@ export default function AddCamp() {
       participantCount,
     };
     console.log(campData);
-   const { data : response} = await axiosPublic.post('add-camp',campData)
-   if(response.insertedId){
-    toast.success("Data Added Succesfully")
+   const { data : response} = await axiosPublic.patch(`update-camp/${_id}`,campData)
+   if(response.modifiedCount){
+    toast.success("Data Updated Succesfully")
    }
   };
+
   return (
-    <div className="flex items-center justify-center h-full ">
+    <div className="w-[50vw] overflow-y-auto max-h-[70vh] rounded-md">
+      <DialogHeader>
+        <DialogTitle className="text-center text-2xl mb-5">
+          Update Campain
+        </DialogTitle>
+      </DialogHeader>
       <div className=" mx-auto p-6 bg-gray-50 shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">
-          Camp Registration
-        </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:w-[500px] xl:w-[800px] "
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 "
         >
           {/* Camp Name */}
           <div>
@@ -50,6 +71,7 @@ export default function AddCamp() {
             <input
               id="campName"
               type="text"
+              defaultValue={campName}
               {...register("campName", { required: "Camp Name is required" })}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
@@ -67,13 +89,13 @@ export default function AddCamp() {
               Camp Image
             </label>
             <Input
-                    className="text-sm mt-1 cursor-pointer"
-                    type="file"
-                    name="image"
-                    id="image"
-                    accept="image/*"
-                    {...register("image",  {  required: "Required",})}
-                  />
+              className="text-sm mt-1 cursor-pointer"
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+              {...register("image", { required: "Required" })}
+            />
           </div>
 
           {/* Camp Fees */}
@@ -87,6 +109,7 @@ export default function AddCamp() {
             <input
               id="campFees"
               type="number"
+              defaultValue={campFees}
               {...register("campFees", {
                 required: "Camp Fees are required",
                 valueAsNumber: true,
@@ -110,6 +133,7 @@ export default function AddCamp() {
             <input
               id="date"
               type="date"
+              defaultValue={date}
               {...register("date", { required: "Date is required" })}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
@@ -128,6 +152,7 @@ export default function AddCamp() {
                 Start Time
               </label>
               <input
+                defaultValue={startTime}
                 id="startTime"
                 type="time"
                 {...register("startTime", {
@@ -151,6 +176,7 @@ export default function AddCamp() {
               <input
                 id="endTime"
                 type="time"
+                defaultValue={endTime}
                 {...register("endTime", { required: "End time is required" })}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
@@ -170,6 +196,7 @@ export default function AddCamp() {
             </label>
             <input
               id="location"
+              defaultValue={location}
               type="text"
               {...register("location", { required: "Location is required" })}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
@@ -190,6 +217,7 @@ export default function AddCamp() {
             <input
               id="healthcareProfessional"
               type="text"
+              defaultValue={healthcareProfessional}
               {...register("healthcareProfessional", {
                 required: "Healthcare Professional Name is required",
               })}
@@ -202,8 +230,6 @@ export default function AddCamp() {
             )}
           </div>
 
-         
-
           {/* Description */}
           <div className="col-span-1 md:col-span-2">
             <label
@@ -213,6 +239,7 @@ export default function AddCamp() {
               Description
             </label>
             <textarea
+              defaultValue={description}
               id="description"
               {...register("description", {
                 required: "Description is required",

@@ -16,6 +16,7 @@ import Analytics from "../pages/Dashboard/Participent/Analytics";
 import RegisteredCamps from "../pages/Dashboard/Participent/RegisteredCamps";
 import PaymentHistory from "../pages/Dashboard/Participent/PaymentHistory";
 import Profile from "../pages/Dashboard/Profile";
+import UpdateCampain from "../component/Admin/UpdateCampain";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
         path: "signUp",
         element: <SignUp />,
       },
+      
     ],
   },
   {

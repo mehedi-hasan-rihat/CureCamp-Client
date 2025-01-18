@@ -50,6 +50,7 @@ export default function CampDetails() {
     formState: { errors },
   } = useForm();
   const onSubmit = async (values) => {
+    console.log(values);
     const participantData = {
       ...values,
       campainId: _id,
@@ -170,6 +171,7 @@ export default function CampDetails() {
                                 id="participantName"
                                 defaultValue={user?.displayName}
                                 readOnly
+                                {...register("participantName")}
                                 className="mt-1"
                               />
                             </div>
@@ -181,7 +183,7 @@ export default function CampDetails() {
                                 id="participantEmail"
                                 defaultValue={user?.email}
                                 readOnly
-                                {...register("participantEmailName")}
+                                {...register("participantEmail")}
                                 className="mt-1"
                               />
                             </div>
@@ -195,7 +197,7 @@ export default function CampDetails() {
                                 id="location"
                                 defaultValue={location}
                                 readOnly
-                                {...register("participantEmail")}
+                                {...register("participantLocation")}
                                 className="mt-1"
                               />
                             </div>
@@ -258,7 +260,7 @@ export default function CampDetails() {
                                 Emergency Contact
                               </Label>
                               <Input
-                                {...register("participantemergencyContact")}
+                                {...register("participantEmergencyContact")}
                                 id="emergencyContact"
                                 type="tel"
                                 placeholder="Enter emergency contact number"
