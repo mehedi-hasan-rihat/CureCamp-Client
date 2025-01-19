@@ -50,12 +50,12 @@ export default function ManageCamp() {
     
   }
   return (
-    <div className="flex items-center pr-28 justify-center h-full w-full">
+    <div className="flex items-center justify-center h-full w-full">
       {" "}
       <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
         <Table className="relative">
           <TableCaption className="mb-5">A list of your campains.</TableCaption>
-          <TableHeader className=" bg-blue-300 sticky top-0 z-50">
+          <TableHeader className=" bg-blue-300 sticky top-0 z-40">
             <TableRow>
               <TableHead className="text-white">Camp Name</TableHead>
               <TableHead className="text-white">Date</TableHead>

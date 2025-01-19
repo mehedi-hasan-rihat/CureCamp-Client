@@ -73,10 +73,6 @@ const router = createBrowserRouter([
         element: <Analytics/>
       },
       {
-        path : 'analytics',
-        element: <Analytics/>
-      },
-      {
         path : 'registered-camps',
         element: <RegisteredCamps/>
       },

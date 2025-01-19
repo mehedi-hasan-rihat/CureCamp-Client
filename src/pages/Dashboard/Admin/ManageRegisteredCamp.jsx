@@ -39,6 +39,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { MdOutlineDoneAll } from "react-icons/md";
 export default function ManageRegisteredCamp() {
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
@@ -61,21 +63,21 @@ export default function ManageRegisteredCamp() {
   };
 
   return (
-    <div className="flex items-center pr-28 justify-center h-full w-full">
+    <div className="flex items-center justify-center h-full w-full">
       {" "}
       <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
         <Table className="relative">
           <TableCaption className="mb-5">
             A list of Registered campains.
           </TableCaption>
-          <TableHeader className=" bg-blue-300 sticky top-0 z-50">
+          <TableHeader className=" bg-blue-300 sticky top-0 z-40">
             <TableRow>
               <TableHead className="text-white">Participant Name</TableHead>
               <TableHead className="text-white">Camp Name</TableHead>
               <TableHead className="text-white">Camp Fees</TableHead>
               <TableHead className="text-white">Payment Status</TableHead>
               <TableHead className="text-white">Confirmation Status</TableHead>
-              <TableHead className="text-white">Cancel</TableHead>
+              <TableHead className="text-white">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -88,31 +90,64 @@ export default function ManageRegisteredCamp() {
                 <TableCell>{camp.campFees}</TableCell>
                 <TableCell>{camp["payment-status"]}</TableCell>
                 <TableCell className="">
-                  <Select  onValueChange={async (e)=>{
-                    const response = await  axiosPublic.patch(`/update-confirmation-status/${camp._id}`, {e})
-                   if(response.data.modifiedCount){
-                    toast.success("Data Update Succesfully")
-                   }
-                  }} >
+                  <Select
+                    onValueChange={async (e) => {
+                      const response = await axiosPublic.patch(
+                        `/update-confirmation-status/${camp._id}`,
+                        { e }
+                      );
+                      if (response.data.modifiedCount) {
+                        refetch();
+                        toast.success("Data Update Succesfully");
+                      }
+                    }}
+                  >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={camp["confirmation-status"]} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel >Confirmation Status</SelectLabel>
+                        <SelectLabel>Confirmation Status</SelectLabel>
                         <SelectItem value="Pending">Pending</SelectItem>
                         <SelectItem value="Confirmed">Confirmed</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell className="flex gap-3 text-xl">
+                <TableCell className="flex gap-3 text-xl  items-center justify-center">
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <p
+                        className={`${
+                          camp["payment-status"] === "paid" && camp["confirmation-status"] === "Confirmed"
+                            ? ""
+                            : "hidden"
+                        }`}
+                      >
+                        {" "}
+                        <MdOutlineDoneAll />
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Registration Confirmed, You can't cancle it!</p>
+                    </TooltipContent>
+                  </Tooltip>
+
                   <Tooltip>
                     <TooltipTrigger>
                       <AlertDialog>
                         <AlertDialogTrigger>
                           {" "}
-                          <MdOutlineCancel />
+                          <p
+                         className={`${
+                          camp["payment-status"] === "paid" && camp["confirmation-status"] === "Confirmed"
+                            ? "hidden"
+                            : ""
+                        }`}
+                      >
+                            {" "}
+                            <MdOutlineCancel />
+                          </p>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
