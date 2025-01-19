@@ -70,7 +70,7 @@ export default function ManageRegisteredCamp() {
           <TableCaption className="mb-5">
             A list of Registered campains.
           </TableCaption>
-          <TableHeader className=" bg-blue-300 sticky top-0 z-40">
+          <TableHeader className=" bg-blue-300 sticky top-0 z-10">
             <TableRow>
               <TableHead className="text-white">Participant Name</TableHead>
               <TableHead className="text-white">Camp Name</TableHead>

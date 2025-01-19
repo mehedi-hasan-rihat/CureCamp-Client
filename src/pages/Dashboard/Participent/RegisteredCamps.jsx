@@ -11,14 +11,11 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/Dialog_2";
+
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -41,32 +38,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+import { Textarea } from "@/components/ui/textarea";
+
+import { VscFeedback } from "react-icons/vsc";
 import { Button } from "@/components/ui/button";
 import { MdOutlineDoneAll } from "react-icons/md";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import PaymentForm from './PaymentForm'
+import PaymentForm from "./PaymentForm";
+import useAuth from "../../../hook/useAuth";
+import ReactStars from "react-rating-stars-component";
+import { DialogClose } from "@radix-ui/react-dialog";
 export default function RegisteredCamps() {
+  const { user } = useAuth();
+  const [rating, setRating] = useState(0);
+
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
   const { data, refetch } = useQuery({
     queryKey: ["camp"],
+    enabled: !!user,
     queryFn: async () => {
       const response = await axiosPublic(`/manage-registered-camps`);
       setCamps(response.data);
       return response.data;
     },
   });
-
+  console.log(camps);
   const campDelete = async (id) => {
     const { data: res } = await axiosPublic.delete(`delete-reg-camp/${id}`);
     if (res.deletedCount) {
@@ -76,18 +75,39 @@ export default function RegisteredCamps() {
     console.log(res);
   };
 
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY)
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+  };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  console.log(isOpen);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(e.target.review.value, rating);
+    const { data } = await axiosPublic.post("/reviews", {
+      name: user?.displayName,
+      profile_image: user?.photoURL,
+      email: user?.email,
+      review: e.target.review.value,
+      rating: rating,
+    });
+    if (data.insertedId) {
+      toast.success("Thank You for your valueable time!");
+    }
+  };
   return (
-    <div className="flex items-center pr-28 justify-center h-full w-full">
+    <div className="flex items-center justify-center h-full w-full">
       {" "}
       <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
         <Table className="relative">
           <TableCaption className="mb-5">
             A list of Registered campains.
           </TableCaption>
-          <TableHeader className=" bg-blue-300 sticky top-0 z-40">
+          <TableHeader className=" bg-blue-300 sticky top-0 z-10">
             <TableRow>
               <TableHead className="text-white">Camp Name</TableHead>
               <TableHead className="text-white">Camp Fees</TableHead>
@@ -104,10 +124,15 @@ export default function RegisteredCamps() {
                 <TableCell>{camp.campFees}</TableCell>
                 <TableCell>
                   <div variant="outline" className="w-full">
-                    {camp["payment-status"] === "paid" ? (
-                      <Dialog>
-                        <DialogTrigger className='w-full text-start'>
+                    {camp?.campFees === 0 ? (
+                      <p>Free</p>
+                    ) : camp["payment-status"] === "unpaid" ? (
+                      <Dialog open={isOpen}>
+                        <DialogTrigger className="w-full text-start">
                           <Button
+                            onClick={() => {
+                              setIsOpen(true);
+                            }}
                             variant="outline"
                             className="w-full lg:w-[60%]"
                           >
@@ -116,15 +141,30 @@ export default function RegisteredCamps() {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle className="text-center mb-8"><p>Payment </p></DialogTitle>
+                            <DialogTitle className="text-center mb-8">
+                              <p>Payment </p>
+                            </DialogTitle>
                             <div className="">
-                              <p className="text-[15px] font-semibold">Camp Name : <span className="font-medium">{camp?.campName}</span></p>
-                              <p className="text-[15px] font-semibold">Camp Fees : <span className="font-medium">${camp?.campFees}</span></p>
+                              <p className="text-[15px] font-semibold">
+                                Camp Name :{" "}
+                                <span className="font-medium">
+                                  {camp?.campName}
+                                </span>
+                              </p>
+                              <p className="text-[15px] font-semibold">
+                                Camp Fees :{" "}
+                                <span className="font-medium">
+                                  ${camp?.campFees}
+                                </span>
+                              </p>
                               <Elements stripe={stripePromise}>
-                                <PaymentForm campId={camp?.campainId}/>
+                                <PaymentForm
+                                  camp={camp}
+                                  setIsOpen={setIsOpen}
+                                  refetch={refetch}
+                                />
                               </Elements>
                             </div>
-                      
                           </DialogHeader>
                         </DialogContent>
                       </Dialog>
@@ -207,11 +247,68 @@ export default function RegisteredCamps() {
                 </TableCell>
                 <TableCell>
                   <div variant="outline" className="w-full">
-                    {camp["payment-status"] === "paid" ? (
-                      <Button variant="outline" className="w-full">
-                        {" "}
-                        Feedback
-                      </Button>
+                    {camp["payment-status"] === "paid" &&
+                    camp["confirmation-status"] === "Confirmed" ? (
+                      <Dialog>
+                        <DialogTrigger className="w-full text-start">
+                          <Button variant="outline" className="w-full">
+                            {" "}
+                            Feedback
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle className="">
+                              <div className="flex gap-2">
+                                {" "}
+                                <VscFeedback className="" /> Feedback
+                              </div>
+                            </DialogTitle>
+                            <div className="pt-5">
+                              <div className="">
+                                <h2 className="text-xl font-semibold">
+                                  How are you felling?
+                                </h2>
+                                <p className="text-base leading-tight mt-1 font-medium">
+                                  Your feedback helps us improve and serve you
+                                  better. Please share your experience with us.
+                                </p>
+                              </div>
+
+                              <div className="mt-5">
+                                <div className="">
+                                  <h3 className="text-md font-semibold">
+                                    Rate Your Experience
+                                  </h3>
+                                  <ReactStars
+                                    classNames={"-mt-4"}
+                                    count={5}
+                                    onChange={handleRatingChange}
+                                    size={40}
+                                    activeColor="#ffd700"
+                                  />
+                                </div>
+                                <form
+                                  onSubmit={onSubmit}
+                                  className="grid w-full gap-2"
+                                >
+                                  <Textarea
+                                    name="review"
+                                    className="max-h-32"
+                                    placeholder="Type your message here."
+                                  />
+                                  <DialogClose className="">
+                                    {" "}
+                                    <Button className="bg-primary/80 w-full text-white">
+                                      Send message
+                                    </Button>
+                                  </DialogClose>
+                                </form>
+                              </div>
+                            </div>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
                     ) : (
                       <Button variant="outline" className="w-full">
                         {" "}

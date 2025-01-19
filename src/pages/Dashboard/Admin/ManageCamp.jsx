@@ -55,7 +55,7 @@ export default function ManageCamp() {
       <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
         <Table className="relative">
           <TableCaption className="mb-5">A list of your campains.</TableCaption>
-          <TableHeader className=" bg-blue-300 sticky top-0 z-40">
+          <TableHeader className=" bg-blue-300 sticky top-0 z-10">
             <TableRow>
               <TableHead className="text-white">Camp Name</TableHead>
               <TableHead className="text-white">Date</TableHead>

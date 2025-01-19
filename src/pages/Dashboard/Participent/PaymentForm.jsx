@@ -5,25 +5,25 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
 import useAuth from "../../../hook/useAuth";
-export default function StripeForm({campId}) {
+import { DialogClose, DialogTrigger } from "@radix-ui/react-dialog";
+export default function StripeForm({ camp, setIsOpen, refetch }) {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
-  const {user} = useAuth()
-const axiosPublic = useAxiosPublic()
+  const { user } = useAuth();
+  const axiosPublic = useAxiosPublic();
   useEffect(() => {
     getPaymentIntent();
   }, []);
 
   // console.log(clientSecret);
 
-
   const getPaymentIntent = async () => {
     try {
-      const {data}  = await axiosPublic.post('/payment-intent',{
-        campId: campId,
-       }); 
+      const { data } = await axiosPublic.post("/payment-intent", {
+        campId: camp.campainId,
+      });
 
       setClientSecret(data.clientSecret);
       console.log(data.clientSecret);
@@ -72,12 +72,22 @@ const axiosPublic = useAxiosPublic()
     console.log(paymentIntent);
     if (paymentIntent?.status == "succeeded") {
       try {
-      
+        await axiosPublic.post("/payments", {
+          participantName: user?.displayName,
+          participantemail: user?.email,
+          participantId: camp?._id,
+          campId: camp.campainId,
+          m : 4,
+          tnxId: paymentIntent.id,
+        });
         toast.success("Order Succesfull");
+        setIsOpen(false);
+        refetch()
+        
       } catch (err) {
         console.log(err);
       } finally {
-        
+        // setProcessing(false)
       }
     }
   };
@@ -107,10 +117,15 @@ const axiosPublic = useAxiosPublic()
           className="text-white"
           type="submit"
           disabled={!stripe || !clientSecret || processing}
-        >{`Pay :  ${ 10}`}</Button>
-        <Button type='button'  variant="outline">
-          Cancle
-        </Button>
+        >{`Pay :  ${10}`}</Button>
+
+       
+          <Button onClick ={() => {
+            setIsOpen(false)
+          }} type="button" variant="outline">
+            Cancle
+          </Button>
+    
       </div>
     </form>
   );
