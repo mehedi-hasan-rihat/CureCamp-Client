@@ -74,10 +74,8 @@ export default function StripeForm({ camp, setIsOpen, refetch }) {
       try {
         await axiosPublic.post("/payments", {
           participantName: user?.displayName,
-          participantemail: user?.email,
+          participantEmail: user?.email,
           participantId: camp?._id,
-          campId: camp.campainId,
-          m : 4,
           tnxId: paymentIntent.id,
         });
         toast.success("Order Succesfull");
