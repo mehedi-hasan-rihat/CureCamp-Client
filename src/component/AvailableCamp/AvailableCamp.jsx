@@ -14,7 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { TfiLayoutColumn3 } from "react-icons/tfi";
+import { GoColumns } from "react-icons/go";
 export default function AvailableCampsPage() {
   const [camps, setCamps] = useState([]);
   const axiosPublic = useAxiosPublic();
@@ -39,7 +40,7 @@ export default function AvailableCampsPage() {
         Available Camps
       </h2>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-2 my-2">
         <form className="flex gap-2">
           <Input
             onChange={(e) => {
@@ -55,7 +56,7 @@ export default function AvailableCampsPage() {
               setSort(e);
             }}
           >
-            <SelectTrigger className="w-[180px] ring-0 focus:ring-0">
+            <SelectTrigger className="w-[150px] md:w-[180px] ring-0 focus:ring-0">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -72,9 +73,16 @@ export default function AvailableCampsPage() {
         <div className="">
           <button
             onClick={() => setIsTwoColumn(!isTwoColumn)}
-            className="mb-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition duration-300"
+            className="mb-4 hidden md:block px-6 py-2 bg-blue-500 text-white font-semibold rounded-sm adow hover:bg-blue-600 transition duration-300"
           >
             {isTwoColumn ? "Switch to Three Columns" : "Switch to Two Columns"}
+          </button>
+
+          <button
+            onClick={() => setIsTwoColumn(!isTwoColumn)}
+            className="mb-4 md:hidden block px-6 pt-3 pb-2 bg-primary/80 text-white font-bold rounded-sm shadow hover:bg-blue-600 transition duration-300"
+          >
+            {isTwoColumn ? <TfiLayoutColumn3/> : <GoColumns/>}
           </button>
         </div>
       </div>

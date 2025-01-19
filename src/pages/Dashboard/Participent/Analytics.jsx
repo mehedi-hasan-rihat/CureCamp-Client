@@ -23,7 +23,7 @@ const CampAnalyticsCharts = () => {
   const [campData, setCampData] = useState([]);
 console.log(user);
   const { isLoading } = useQuery({
-    queryKey: ['RegistrationCamp', user],
+    queryKey: ['analytics-registered-camps', user],
     enabled: !!user,
     queryFn: async () => {
       const response = await axiosPublic(`/analytics-registered-camps/${user?.email}`);
@@ -34,7 +34,7 @@ console.log(user);
 
   return (
     <div className="w-full p-4 sm:p-6 bg-[#F4F9FF] rounded-lg space-y-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
         Medical Camp Analytics
       </h1>
 
@@ -50,7 +50,7 @@ console.log(user);
         <>
           {/* Chart 1 */}
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 text-center">
               Camp Fees and Participants
             </h2>
             <div className="w-full h-64 sm:h-96">
@@ -105,7 +105,7 @@ console.log(user);
 
             {/* Area Chart 2 */}
             <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 text-center">
               Camp Dates and Fees
             </h2>
             <div className="w-full h-64 sm:h-96">

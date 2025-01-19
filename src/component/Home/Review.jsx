@@ -39,13 +39,13 @@ export default function Review() {
 
   return (
     <Container>
-      <div className="bg-gradient-to-r from-primary to-btn-hover p-8 rounded-xl my-28">
-        <div className="flex flex-col items-center justify-center gap-14 text-center my-20 ">
-          <div className="  flex flex-col items-center justify-center max-w-2xl">
-            <h3 className="text-3xl text-white font-semibold secondary-font">
+      <div className="bg-gradient-to-r from-primary to-btn-hover px-4 pt-8 pb-16 md:px-8 md:py-14 rounded-xl my-16 md:my-28">
+        <div className="flex flex-col items-center justify-center gap-14 text-center ">
+        <div className=" flex flex-col items-center justify-center text-center my-2 md:my-10 max-w-2xl mx-auto">
+            <h3 className="text-2xl text-white md:text-3xl font-semibold secondary-font">
               Hear From Our Happy Campers
             </h3>
-            <p className="mt-2 font-medium text-white/80">
+            <p className="mt-px text-white md:mt-2 text-xs md:text-base font-medium ">
               Discover what makes Madi Camp special through the words of our
               visitors. From serene landscapes to unforgettable adventures, our
               campers share their stories of joy and relaxation. Join the
@@ -57,7 +57,7 @@ export default function Review() {
               {reviews?.map((review) => (
                 <CarouselItem
                   key={review?._id}
-                  className="pl-1 basis-10/12 md:basis-1/2 xl:basis-1/3 h-full"
+                  className="pl-1 sm:basis-10/12 md:basis-1/2 xl:basis-1/3 h-full"
                 >
                   <div className="px-1 h-52">
                     <Card className="h-full p-4">

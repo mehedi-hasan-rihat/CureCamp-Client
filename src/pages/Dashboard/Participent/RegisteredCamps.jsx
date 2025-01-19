@@ -56,7 +56,7 @@ export default function RegisteredCamps() {
 
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ["camp"],
     enabled: !!user,
     queryFn: async () => {
@@ -100,9 +100,24 @@ export default function RegisteredCamps() {
     }
   };
   return (
+    <div className="w-full bg-[#F4F9FF] rounded-lg space-y-8">
+    <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
+      Registered Camps
+    </h1>
+
+    {isLoading ? (
+      <div className="flex justify-center items-center h-96">
+        <p className="text-lg font-semibold text-gray-500">Loading data...</p>
+      </div>
+    ) :camps.length === 0 ? (
+      <div className="flex justify-center items-center h-96">
+        <p className="text-lg font-semibold text-gray-500">No data available</p>
+      </div>
+    ) :
+
     <div className="flex items-center justify-center h-full w-full">
       {" "}
-      <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
+      <ScrollArea className="w-full max-h-[80vh] whitespace-nowrap rounded-md border">
         <Table className="relative">
           <TableCaption className="mb-5">
             A list of Registered campains.
@@ -178,18 +193,10 @@ export default function RegisteredCamps() {
                 </TableCell>
                 <TableCell className="flex gap-3 text-xl  items-center justify-center">
                   <div variant="outline" className="w-full">
-                    {camp["payment-status"] === "paid" ? (
+                    {camp["payment-status"] === "paid"  ? (
                       <Tooltip>
                         <TooltipTrigger>
-                          <p
-                            className={`${
-                              camp["payment-status"] === "paid" &&
-                              camp["confirmation-status"] === "Confirmed"
-                                ? ""
-                                : "hidden"
-                            }`}
-                          >
-                            {" "}
+                          <p>
                             <MdOutlineDoneAll />
                           </p>
                         </TooltipTrigger>
@@ -203,14 +210,7 @@ export default function RegisteredCamps() {
                           <AlertDialog>
                             <AlertDialogTrigger>
                               {" "}
-                              <p
-                                className={`${
-                                  camp["payment-status"] === "paid" &&
-                                  camp["confirmation-status"] === "Confirmed"
-                                    ? "hidden"
-                                    : ""
-                                }`}
-                              >
+                              <p>
                                 {" "}
                                 <MdOutlineCancel />
                               </p>
@@ -323,6 +323,6 @@ export default function RegisteredCamps() {
         </Table>{" "}
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-    </div>
+    </div>}</div>
   );
 }

@@ -30,14 +30,14 @@ export default function AddCamp() {
    }
   };
   return (
-    <div className="flex items-center justify-center h-full ">
-      <div className=" mx-auto p-6 bg-gray-50 shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+    <div className="flex items-center justify-center h-full px-5">
+      <div className=" mx-auto p-6 bg-[#f5faff] shadow rounded-md">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-800 text-center">
           Camp Registration
         </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:w-[500px] xl:w-[800px] "
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 w-[320px] sm:w-[500px] md:w-[700px] xl:w-[800px] "
         >
           {/* Camp Name */}
           <div>

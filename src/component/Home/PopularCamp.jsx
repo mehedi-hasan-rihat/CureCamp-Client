@@ -25,10 +25,18 @@ export default function PopularCamp() {
   
   return (
     <Container>
-      <div className="mt-20 ">
-        <div className="text-center text-4xl font-semibold font-mono mb-10 text-black secondary-font">
-          PopularCamp
-        </div>
+      <div className="mt-10 md:mt-20 ">
+      <div className=" flex flex-col items-center justify-center text-center max-w-2xl mx-auto my-5 md:my-10">
+            <h3 className="text-2xl md:text-3xl font-semibold secondary-font">
+              Hear From Our Happy Campers
+            </h3>
+            <p className="mt-px md:mt-2 text-xs md:text-base font-medium ">
+              Discover what makes Madi Camp special through the words of our
+              visitors. From serene landscapes to unforgettable adventures, our
+              campers share their stories of joy and relaxation. Join the
+              journey and create your own magical memories!
+            </p>
+          </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {popularCampain.map((campData) => (

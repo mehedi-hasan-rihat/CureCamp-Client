@@ -28,7 +28,8 @@ export default function FAQ() {
 
   return (
     <Container>
-      <div className="text-center text-2xl font-semibold mb-8">
+     <div className=" mb-5">
+     <div className="text-center text-2xl md:text-2xl font-semibold">
         <h3>Medical Camp FAQ</h3>
       </div>
       <div className="flex flex-col lg:flex-row justify-between gap-20">
@@ -41,7 +42,7 @@ export default function FAQ() {
                 className="group p-6 [&_summary::-webkit-details-marker]:hidden"
               >
                 <summary className="flex cursor-pointer items-center justify-between gap-1.5 text-gray-900">
-                  <h2 className="text-lg font-medium">{faq.question}</h2>
+                  <h2 className="md:text-lg font-medium">{faq.question}</h2>
                   <span className="relative size-5 shrink-0">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -75,14 +76,14 @@ export default function FAQ() {
                   </span>
                 </summary>
 
-                <p className="mt-4 leading-relaxed text-gray-700">{faq.answer}</p>
+                <p className="mt-4 text-sm md:text-base leading-relaxed text-gray-700">{faq.answer}</p>
               </details>
             ))}
           </div>
         </div>
 
         {/* FAQ Image */}
-        <div className="h-[500px]">
+        <div className="hidden lg:block h-[500px]">
           <img
             src={FAQIMG}
             alt="FAQ Illustration"
@@ -90,6 +91,7 @@ export default function FAQ() {
           />
         </div>
       </div>
+     </div>
     </Container>
   );
 }

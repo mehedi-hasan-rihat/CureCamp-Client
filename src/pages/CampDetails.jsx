@@ -67,7 +67,7 @@ export default function CampDetails() {
 
   return (
     <Container>
-      <div className="min-h-[90vh] flex items-center my-10 max-w-xl xl:max-w-full mx-auto">
+      <div className="min-h-[90vh]  py-20 xl:py-0 flex items-center my-10 max-w-xl xl:max-w-full mx-auto">
         <div className=" flex flex-col xl:flex-row gap-6  ">
           <div className="group flex-1 relative block h-[400px]">
             <div className="absolute inset-0 bg-blue-300 rounded"></div>
