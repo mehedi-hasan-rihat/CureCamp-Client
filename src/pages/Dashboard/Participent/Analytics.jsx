@@ -26,7 +26,7 @@ console.log(user);
     queryKey: ['analytics-registered-camps', user],
     enabled: !!user,
     queryFn: async () => {
-      const response = await axiosPublic(`/analytics-registered-camps/${user?.email}`);
+      const response = await axiosPublic(`/registered-camps/${user?.email}`);
       setCampData(response.data);
       return response.data;
     },

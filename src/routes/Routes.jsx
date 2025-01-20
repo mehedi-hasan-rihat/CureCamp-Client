@@ -16,7 +16,7 @@ import Analytics from "../pages/Dashboard/Participent/Analytics";
 import RegisteredCamps from "../pages/Dashboard/Participent/RegisteredCamps";
 import PaymentHistory from "../pages/Dashboard/Participent/PaymentHistory";
 import Profile from "../pages/Dashboard/Profile";
-import UpdateCampain from "../component/Admin/UpdateCampain";
+import AdminRoute from "./adminRoute";
 
 const router = createBrowserRouter([
   {
@@ -49,40 +49,43 @@ const router = createBrowserRouter([
         path: "signUp",
         element: <SignUp />,
       },
-      
     ],
   },
   {
-    path: "dashboard",
+    path: "/dashboard",
     element: <Dashboard />,
     children: [
       {
         index: true,
-        element: <AddCamp />,
+        element:<AdminRoute> <AddCamp /></AdminRoute>,
       },
       {
-        path : 'manage-camps',
-        element: <ManageCamp/>
+        path: "manage-camps",
+        element: <AdminRoute><ManageCamp /></AdminRoute>,
       },
       {
-        path : 'manage-registered-camps',
-        element: <ManageRegisteredCamp/>
+        path: "manage-registered-camps",
+        element: (
+          <AdminRoute>
+            <ManageRegisteredCamp />
+          </AdminRoute>
+        ),
       },
       {
-        path : 'analytics',
-        element: <Analytics/>
+        path: "analytics",
+        element: <Analytics />,
       },
       {
-        path : 'registered-camps',
-        element: <RegisteredCamps/>
+        path: "registered-camps",
+        element: <RegisteredCamps />,
       },
       {
-        path : 'payment-history',
-        element: <PaymentHistory/>
+        path: "payment-history",
+        element: <PaymentHistory />,
       },
       {
-        path : 'profile',
-        element: <Profile/>
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },

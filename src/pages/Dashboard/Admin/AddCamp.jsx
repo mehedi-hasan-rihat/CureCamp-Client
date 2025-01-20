@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { ImgURL } from "../../../utils/imgUpload";
 export default function AddCamp() {
+  
   const axiosPublic = useAxiosPublic()
   const {
     register,

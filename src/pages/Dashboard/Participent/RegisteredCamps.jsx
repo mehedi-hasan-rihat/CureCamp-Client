@@ -60,7 +60,7 @@ export default function RegisteredCamps() {
     queryKey: ["camp"],
     enabled: !!user,
     queryFn: async () => {
-      const response = await axiosPublic(`/manage-registered-camps`);
+      const response =await axiosPublic(`/registered-camps/${user?.email}`);
       setCamps(response.data);
       return response.data;
     },

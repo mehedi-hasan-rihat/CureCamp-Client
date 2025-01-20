@@ -4,27 +4,28 @@ import { useForm } from "react-hook-form";
 import { ImgURL } from "../utils/imgUpload";
 import useAuth from "../hook/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import {toast} from 'react-hot-toast';
+import { toast } from "react-hot-toast";
+import useSaveUsers from "../hook/useSaveUsers";
 export default function SignUp() {
-  const navigate = useNavigate()
-  const { createUser, updateUserProfile, user } = useAuth();
-  console.log(user)
+  const navigate = useNavigate();
+  const saveUser = useSaveUsers();
+  const { createUser, updateUserProfile} = useAuth();
+
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
     const photoURL = await ImgURL(data.image[0]);
- 
 
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
       updateUserProfile(data.name, photoURL)
-      .then(()=>{
-        navigate('/')
-        toast.success('Successfully Signup!')
-      })
-      .catch((error) =>
-        console.log(error)
-      );
+        .then(() => {
+          navigate("/");
+          console.log(loggedUser);
+          saveUser(loggedUser)
+          toast.success("Successfully Signup!");
+        })
+        .catch((error) => console.log(error));
     });
   };
   return (
@@ -98,9 +99,13 @@ export default function SignUp() {
 
               <form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex gap-3 mb-3">
-                  <Input {...register("name", {  required: "Required",})} type="name" placeholder="Name" />
                   <Input
-                    {...register("email",  {  required: "Required",})}
+                    {...register("name", { required: "Required" })}
+                    type="name"
+                    placeholder="Name"
+                  />
+                  <Input
+                    {...register("email", { required: "Required" })}
                     type="email"
                     placeholder="Email"
                   />
@@ -109,8 +114,8 @@ export default function SignUp() {
                 <div className="flex gap-3 mb-3 ">
                   <Input
                     type="password"
-                    placeholder="password" 
-                    {...register("password", {  required: "Required",})}
+                    placeholder="password"
+                    {...register("password", { required: "Required" })}
                   />
 
                   <Input
@@ -119,7 +124,7 @@ export default function SignUp() {
                     name="image"
                     id="image"
                     accept="image/*"
-                    {...register("image",  {  required: "Required",})}
+                    {...register("image", { required: "Required" })}
                   />
                 </div>
                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
@@ -129,8 +134,11 @@ export default function SignUp() {
 
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Already have an account?
-                    <Link to='/auth/signin' className="text-gray-700 ml-1 underline">
-                     Signin
+                    <Link
+                      to="/auth/signin"
+                      className="text-gray-700 ml-1 underline"
+                    >
+                      Signin
                     </Link>
                     .
                   </p>

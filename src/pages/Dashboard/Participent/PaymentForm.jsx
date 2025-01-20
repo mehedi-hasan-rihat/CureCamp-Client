@@ -22,13 +22,13 @@ export default function StripeForm({ camp, setIsOpen, refetch }) {
   const getPaymentIntent = async () => {
     try {
       const { data } = await axiosPublic.post("/payment-intent", {
-        campId: camp.campainId,
+        campId: camp.campId,
       });
 
       setClientSecret(data.clientSecret);
       console.log(data.clientSecret);
     } catch (err) {
-      console.log(err);
+      console.log(err, camp);
     }
   };
 

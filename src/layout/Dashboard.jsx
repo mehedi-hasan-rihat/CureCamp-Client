@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
 import { HiBackward } from "react-icons/hi2";
+import useRole from "../hook/useRole";
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(() => !isSidebarOpen);
   };
-
+  const [role, isLoading] = useRole();
+  if (isLoading) return <p>Loading</p>;
   return (
     <div>
       <div
@@ -25,13 +27,33 @@ const Dashboard = () => {
           </div>
 
           <ul className="space-y-3">
-            {[
+            { role === "admin"  && [
               { path: "/dashboard", label: "Add a Camp", exact: true }, // Exact path
               { path: "manage-camps", label: "Manage Camps" },
               {
                 path: "manage-registered-camps",
                 label: "Manage Registered Camps",
               },
+             
+              { path: "profile", label: "Profile" },
+            ].map(({ path, label, exact }) => (
+              <NavLink
+                key={path}
+                to={path}
+                end={exact} // Use `end` for exact matching
+                className={({ isActive }) =>
+                  `block py-2 px-4 rounded-md transition ${
+                    isActive ? "bg-blue-600" : "hover:bg-blue-400"
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+
+
+            { role !== "admin"  && [
+              
               { path: "analytics", label: "Analytics" },
               { path: "registered-camps", label: "Registered Camps" },
               { path: "payment-history", label: "Payment History" },
