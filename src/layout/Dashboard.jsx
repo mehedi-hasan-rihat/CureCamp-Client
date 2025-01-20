@@ -52,7 +52,7 @@ const Dashboard = () => {
             ))}
 
 
-            { role !== "admin"  && [
+            { !role == "admin"  && [
               
               { path: "analytics", label: "Analytics" },
               { path: "registered-camps", label: "Registered Camps" },

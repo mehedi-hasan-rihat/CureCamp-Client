@@ -7,6 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
@@ -39,17 +40,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { MdOutlineDoneAll } from "react-icons/md";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 export default function ManageRegisteredCamp() {
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
+  const [totalData, setTotalData] = useState(null);
+  const [totalPages, setToatalPages] = useState(null);
+  const [currentPages, setCurrentPage] = useState(1);
+
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["manage-registered-camps"],
+    queryKey: ["manage-registered-camps", currentPages],
     queryFn: async () => {
-      const response = await axiosPublic(`/manage-registered-camps`);
-      setCamps(response.data);
-      return response.data;
+      const response = await axiosPublic(
+        `/manage-registered-camps-pagination/${currentPages}`
+      );
+      setCamps(response.data.result);
+      setTotalData(response.data.totalData);
+      setToatalPages(Math.ceil(response.data.totalData / 10));
+      return response.data.result;
     },
   });
 
@@ -72,139 +87,177 @@ export default function ManageRegisteredCamp() {
         <div className="flex justify-center items-center h-96">
           <p className="text-lg font-semibold text-gray-500">Loading data...</p>
         </div>
-      ) :camps.length === 0 ? (
+      ) : camps.length === 0 ? (
         <div className="flex justify-center items-center h-96">
-          <p className="text-lg font-semibold text-gray-500">No data available</p>
+          <p className="text-lg font-semibold text-gray-500">
+            No data available
+          </p>
         </div>
-      ) :
-
-      <div className="flex items-center justify-center h-full w-full">
-        {" "}
-        <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
-          <Table className="relative">
-            <TableCaption className="mb-5">
-              A list of Registered campains.
-            </TableCaption>
-            <TableHeader className=" bg-blue-300 sticky top-0 z-10">
-              <TableRow>
-                <TableHead className="text-white">Participant Name</TableHead>
-                <TableHead className="text-white">Camp Name</TableHead>
-                <TableHead className="text-white">Camp Fees</TableHead>
-                <TableHead className="text-white">Payment Status</TableHead>
-                <TableHead className="text-white">
-                  Confirmation Status
-                </TableHead>
-                <TableHead className="text-white">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {camps.map((camp) => (
-                <TableRow key={camp._id}>
-                  <TableCell className="font-medium">
-                    {camp.participantName}
-                  </TableCell>
-                  <TableCell>{camp.campName}</TableCell>
-                  <TableCell>{camp.campFees}</TableCell>
-                  <TableCell>{camp["payment-status"]}</TableCell>
-                  <TableCell className="">
-                    <Select
-                      onValueChange={async (e) => {
-                        const response = await axiosPublic.patch(
-                          `/update-confirmation-status/${camp._id}`,
-                          { e }
-                        );
-                        if (response.data.modifiedCount) {
-                          refetch();
-                          toast.success("Data Update Succesfully");
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue
-                          placeholder={camp["confirmation-status"]}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Confirmation Status</SelectLabel>
-                          <SelectItem value="Pending">Pending</SelectItem>
-                          <SelectItem value="Confirmed">Confirmed</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell className="flex gap-3 text-xl  items-center justify-center">
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <p
-                          className={`${
-                            camp["payment-status"] === "paid" &&
-                            camp["confirmation-status"] === "Confirmed"
-                              ? ""
-                              : "hidden"
-                          }`}
-                        >
-                          {" "}
-                          <MdOutlineDoneAll />
-                        </p>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Registration Confirmed, You can't cancle it!</p>
-                      </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <AlertDialog>
-                          <AlertDialogTrigger>
+      ) : (
+        <div className="flex items-center justify-center h-full w-full">
+          {" "}
+          <ScrollArea className="w-full h-[80vh] whitespace-nowrap rounded-md border">
+            <Table className="relative">
+              <TableCaption className="mb-5">
+                A list of Registered campains.
+              </TableCaption>
+              <TableHeader className=" bg-blue-300 sticky top-0 z-10">
+                <TableRow>
+                  <TableHead className="text-white">Participant Name</TableHead>
+                  <TableHead className="text-white">Camp Name</TableHead>
+                  <TableHead className="text-white">Camp Fees</TableHead>
+                  <TableHead className="text-white">Payment Status</TableHead>
+                  <TableHead className="text-white">
+                    Confirmation Status
+                  </TableHead>
+                  <TableHead className="text-white">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {camps.map((camp) => (
+                  <TableRow key={camp._id}>
+                    <TableCell className="font-medium">
+                      {camp.participantName}
+                    </TableCell>
+                    <TableCell>{camp.campName}</TableCell>
+                    <TableCell>{camp.campFees}</TableCell>
+                    <TableCell>{camp["payment-status"]}</TableCell>
+                    <TableCell className="">
+                      <Select
+                        onValueChange={async (e) => {
+                          const response = await axiosPublic.patch(
+                            `/update-confirmation-status/${camp._id}`,
+                            { e }
+                          );
+                          if (response.data.modifiedCount) {
+                            refetch();
+                            toast.success("Data Update Succesfully");
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue
+                            placeholder={camp["confirmation-status"]}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Confirmation Status</SelectLabel>
+                            <SelectItem value="Pending">Pending</SelectItem>
+                            <SelectItem value="Confirmed">Confirmed</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </TableCell>
+                    <TableCell className="flex gap-3 text-xl  items-center justify-center">
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <p
+                            className={`${
+                              camp["payment-status"] === "paid" &&
+                              camp["confirmation-status"] === "Confirmed"
+                                ? ""
+                                : "hidden"
+                            }`}
+                          >
                             {" "}
-                            <p
-                              className={`${
-                                camp["payment-status"] === "paid" &&
-                                camp["confirmation-status"] === "Confirmed"
-                                  ? "hidden"
-                                  : ""
-                              }`}
-                            >
+                            <MdOutlineDoneAll />
+                          </p>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Registration Confirmed, You can't cancle it!</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <AlertDialog>
+                            <AlertDialogTrigger>
                               {" "}
-                              <MdOutlineCancel />
-                            </p>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Are you absolutely sure?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete This registered camp and
-                                remove this data from our servers.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                className="text-white"
-                                onClick={() => campDelete(camp._id)}
+                              <p
+                                className={`${
+                                  camp["payment-status"] === "paid" &&
+                                  camp["confirmation-status"] === "Confirmed"
+                                    ? "hidden"
+                                    : ""
+                                }`}
                               >
-                                Continue
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Cancel Registration</p>
-                      </TooltipContent>
-                    </Tooltip>
+                                {" "}
+                                <MdOutlineCancel />
+                              </p>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete This registered camp and
+                                  remove this data from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className="text-white"
+                                  onClick={() => campDelete(camp._id)}
+                                >
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Cancel Registration</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={5}>{`Showing ${currentPages} of ${totalPages} Pages`}</TableCell>
+                  <TableCell className="flex gap-1">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            className={
+                              currentPages === 1
+                                ? "pointer-events-none cursor-not-allowed opacity-50"
+                                : "cursor-pointer"
+                            }
+                            onClick={() => {
+                              setCurrentPage(currentPages - 1);
+                            }}
+                          />
+                        </PaginationItem>
+
+                        <PaginationItem>
+                          <PaginationNext
+                            className={
+                              currentPages === totalPages
+                                ? "pointer-events-none cursor-not-allowed opacity-50"
+                                : "cursor-pointer"
+                            }
+                            onClick={() => {
+                              setCurrentPage(currentPages + 1);
+                            }}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>{" "}
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>}
+              </TableFooter>
+            </Table>{" "}
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+      )}
     </div>
   );
 }

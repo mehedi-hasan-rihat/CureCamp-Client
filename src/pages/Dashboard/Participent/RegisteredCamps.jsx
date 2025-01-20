@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import {
   Table,
@@ -7,6 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table";
 import {
   Dialog,
@@ -15,7 +18,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog_2";
-
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -54,15 +63,22 @@ export default function RegisteredCamps() {
   const { user } = useAuth();
   const [rating, setRating] = useState(0);
 
+  const [totalPages, setToatalPages] = useState(null);
+  const [currentPages, setCurrentPage] = useState(1);
+
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["camp"],
     enabled: !!user,
     queryFn: async () => {
-      const response =await axiosPublic(`/registered-camps/${user?.email}`);
-      setCamps(response.data);
-      return response.data;
+      const response = await axiosPublic(
+        `/registered-camps/${user?.email}?page=${currentPages}`
+      );
+      setCamps(response.data.result);
+      console.log(response.data.result, (Math.ceil(response.data.totalData / 10)) );
+      setToatalPages(Math.ceil(response.data.totalData / 10));
+      return response.data.result;
     },
   });
   console.log(camps);
@@ -83,8 +99,7 @@ export default function RegisteredCamps() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [processing, setProcessing] = useState(false);
-  console.log(isOpen);
-
+ 
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(e.target.review.value, rating);
@@ -101,228 +116,274 @@ export default function RegisteredCamps() {
   };
   return (
     <div className="w-full bg-[#F4F9FF] rounded-lg space-y-8">
-    <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
-      Registered Camps
-    </h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
+        Registered Camps
+      </h1>
 
-    {isLoading ? (
-      <div className="flex justify-center items-center h-96">
-        <p className="text-lg font-semibold text-gray-500">Loading data...</p>
-      </div>
-    ) :camps.length === 0 ? (
-      <div className="flex justify-center items-center h-96">
-        <p className="text-lg font-semibold text-gray-500">No data available</p>
-      </div>
-    ) :
-
-    <div className="flex items-center justify-center h-full w-full">
-      {" "}
-      <ScrollArea className="w-full max-h-[80vh] whitespace-nowrap rounded-md border">
-        <Table className="relative">
-          <TableCaption className="mb-5">
-            A list of Registered campains.
-          </TableCaption>
-          <TableHeader className=" bg-blue-300 sticky top-0 z-10">
-            <TableRow>
-              <TableHead className="text-white">Camp Name</TableHead>
-              <TableHead className="text-white">Camp Fees</TableHead>
-              <TableHead className="text-white">Payment Status</TableHead>
-              <TableHead className="text-white">Confirmation Status</TableHead>
-              <TableHead className="text-white">Action</TableHead>
-              <TableHead className="text-white">Feedback</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {camps.map((camp) => (
-              <TableRow key={camp._id}>
-                <TableCell>{camp.campName}</TableCell>
-                <TableCell>{camp.campFees}</TableCell>
-                <TableCell>
-                  <div variant="outline" className="w-full">
-                    {camp?.campFees === 0 ? (
-                      <p>Free</p>
-                    ) : camp["payment-status"] === "unpaid" ? (
-                      <Dialog open={isOpen}>
-                        <DialogTrigger className="w-full text-start">
-                          <Button
-                            onClick={() => {
-                              setIsOpen(true);
-                            }}
-                            variant="outline"
-                            className="w-full lg:w-[60%]"
-                          >
-                            Pay
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle className="text-center mb-8">
-                              <p>Payment </p>
-                            </DialogTitle>
-                            <div className="">
-                              <p className="text-[15px] font-semibold">
-                                Camp Name :{" "}
-                                <span className="font-medium">
-                                  {camp?.campName}
-                                </span>
-                              </p>
-                              <p className="text-[15px] font-semibold">
-                                Camp Fees :{" "}
-                                <span className="font-medium">
-                                  ${camp?.campFees}
-                                </span>
-                              </p>
-                              <Elements stripe={stripePromise}>
-                                <PaymentForm
-                                  camp={camp}
-                                  setIsOpen={setIsOpen}
-                                  refetch={refetch}
-                                />
-                              </Elements>
-                            </div>
-                          </DialogHeader>
-                        </DialogContent>
-                      </Dialog>
-                    ) : (
-                      <p className="w-full">Paid</p>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell className="">
-                  <p>{camp["confirmation-status"]}</p>
-                </TableCell>
-                <TableCell className="flex gap-3 text-xl  items-center justify-center">
-                  <div variant="outline" className="w-full">
-                    {camp["payment-status"] === "paid"  ? (
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <p>
-                            <MdOutlineDoneAll />
-                          </p>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Payment done, You can't cancle it!</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <AlertDialog>
-                            <AlertDialogTrigger>
-                              {" "}
+      {isLoading ? (
+        <div className="flex justify-center items-center h-96">
+          <p className="text-lg font-semibold text-gray-500">Loading data...</p>
+        </div>
+      ) : camps.length === 0 ? (
+        <div className="flex justify-center items-center h-96">
+          <p className="text-lg font-semibold text-gray-500">
+            No data available
+          </p>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-full w-full">
+          {" "}
+          <ScrollArea className="w-full max-h-[80vh] whitespace-nowrap rounded-md border">
+            <Table className="relative">
+              <TableCaption className="mb-5">
+                A list of Registered campains.
+              </TableCaption>
+              <TableHeader className=" bg-blue-300 sticky top-0 z-10">
+                <TableRow>
+                  <TableHead className="text-white">Camp Name</TableHead>
+                  <TableHead className="text-white">Camp Fees</TableHead>
+                  <TableHead className="text-white">Payment Status</TableHead>
+                  <TableHead className="text-white">
+                    Confirmation Status
+                  </TableHead>
+                  <TableHead className="text-white">Action</TableHead>
+                  <TableHead className="text-white">Feedback</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {camps.map((camp) => (
+                  <TableRow key={camp._id}>
+                    <TableCell>{camp.campName}</TableCell>
+                    <TableCell>{camp.campFees}</TableCell>
+                    <TableCell>
+                      <div variant="outline" className="w-full">
+                        {camp?.campFees === 0 ? (
+                          <p>Free</p>
+                        ) : camp["payment-status"] === "unpaid" ? (
+                          <Dialog open={isOpen}>
+                            <DialogTrigger className="w-full text-start">
+                              <Button
+                                onClick={() => {
+                                  setIsOpen(true);
+                                }}
+                                variant="outline"
+                                className="w-full lg:w-[60%]"
+                              >
+                                Pay
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle className="text-center mb-8">
+                                  <p>Payment </p>
+                                </DialogTitle>
+                                <div className="">
+                                  <p className="text-[15px] font-semibold">
+                                    Camp Name :{" "}
+                                    <span className="font-medium">
+                                      {camp?.campName}
+                                    </span>
+                                  </p>
+                                  <p className="text-[15px] font-semibold">
+                                    Camp Fees :{" "}
+                                    <span className="font-medium">
+                                      ${camp?.campFees}
+                                    </span>
+                                  </p>
+                                  <Elements stripe={stripePromise}>
+                                    <PaymentForm
+                                      camp={camp}
+                                      setIsOpen={setIsOpen}
+                                      refetch={refetch}
+                                    />
+                                  </Elements>
+                                </div>
+                              </DialogHeader>
+                            </DialogContent>
+                          </Dialog>
+                        ) : (
+                          <p className="w-full">Paid</p>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="">
+                      <p>{camp["confirmation-status"]}</p>
+                    </TableCell>
+                    <TableCell className="flex gap-3 text-xl  items-center justify-center">
+                      <div variant="outline" className="w-full">
+                        {camp["payment-status"] === "paid" ? (
+                          <Tooltip>
+                            <TooltipTrigger>
                               <p>
-                                {" "}
-                                <MdOutlineCancel />
+                                <MdOutlineDoneAll />
                               </p>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This action cannot be undone. This will
-                                  permanently delete This registered camp and
-                                  remove this data from our servers.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className="text-white"
-                                  onClick={() => campDelete(camp._id)}
-                                >
-                                  Continue
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Cancel Registration</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div variant="outline" className="w-full">
-                    {camp["payment-status"] === "paid" &&
-                    camp["confirmation-status"] === "Confirmed" ? (
-                      <Dialog>
-                        <DialogTrigger className="w-full text-start">
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Payment done, You can't cancle it!</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <AlertDialog>
+                                <AlertDialogTrigger>
+                                  {" "}
+                                  <p>
+                                    {" "}
+                                    <MdOutlineCancel />
+                                  </p>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Are you absolutely sure?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      This action cannot be undone. This will
+                                      permanently delete This registered camp
+                                      and remove this data from our servers.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      className="text-white"
+                                      onClick={() => campDelete(camp._id)}
+                                    >
+                                      Continue
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Cancel Registration</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div variant="outline" className="w-full">
+                        {camp["payment-status"] === "paid" &&
+                        camp["confirmation-status"] === "Confirmed" ? (
+                          <Dialog>
+                            <DialogTrigger className="w-full text-start">
+                              <Button variant="outline" className="w-full">
+                                {" "}
+                                Feedback
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle className="">
+                                  <div className="flex gap-2">
+                                    {" "}
+                                    <VscFeedback className="" /> Feedback
+                                  </div>
+                                </DialogTitle>
+                                <div className="pt-5">
+                                  <div className="">
+                                    <h2 className="text-xl font-semibold">
+                                      How are you felling?
+                                    </h2>
+                                    <p className="text-base leading-tight mt-1 font-medium">
+                                      Your feedback helps us improve and serve
+                                      you better. Please share your experience
+                                      with us.
+                                    </p>
+                                  </div>
+
+                                  <div className="mt-5">
+                                    <div className="">
+                                      <h3 className="text-md font-semibold">
+                                        Rate Your Experience
+                                      </h3>
+                                      <ReactStars
+                                        classNames={"-mt-4"}
+                                        count={5}
+                                        onChange={handleRatingChange}
+                                        size={40}
+                                        activeColor="#ffd700"
+                                      />
+                                    </div>
+                                    <form
+                                      onSubmit={onSubmit}
+                                      className="grid w-full gap-2"
+                                    >
+                                      <Textarea
+                                        name="review"
+                                        className="max-h-32"
+                                        placeholder="Type your message here."
+                                      />
+                                      <DialogClose className="">
+                                        {" "}
+                                        <Button className="bg-primary/80 w-full text-white">
+                                          Send message
+                                        </Button>
+                                      </DialogClose>
+                                    </form>
+                                  </div>
+                                </div>
+                              </DialogHeader>
+                            </DialogContent>
+                          </Dialog>
+                        ) : (
                           <Button variant="outline" className="w-full">
                             {" "}
-                            Feedback
+                            N/A
                           </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle className="">
-                              <div className="flex gap-2">
-                                {" "}
-                                <VscFeedback className="" /> Feedback
-                              </div>
-                            </DialogTitle>
-                            <div className="pt-5">
-                              <div className="">
-                                <h2 className="text-xl font-semibold">
-                                  How are you felling?
-                                </h2>
-                                <p className="text-base leading-tight mt-1 font-medium">
-                                  Your feedback helps us improve and serve you
-                                  better. Please share your experience with us.
-                                </p>
-                              </div>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>{" "}
+              <TableFooter>
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                  >{`Showing ${currentPages} of ${totalPages} Pages`}</TableCell>
+                  <TableCell className="flex gap-1">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            className={
+                              currentPages === 1
+                                ? "pointer-events-none cursor-not-allowed opacity-50"
+                                : "cursor-pointer"
+                            }
+                            onClick={() => {
+                              setCurrentPage(currentPages - 1);
+                            }}
+                          />
+                        </PaginationItem>
 
-                              <div className="mt-5">
-                                <div className="">
-                                  <h3 className="text-md font-semibold">
-                                    Rate Your Experience
-                                  </h3>
-                                  <ReactStars
-                                    classNames={"-mt-4"}
-                                    count={5}
-                                    onChange={handleRatingChange}
-                                    size={40}
-                                    activeColor="#ffd700"
-                                  />
-                                </div>
-                                <form
-                                  onSubmit={onSubmit}
-                                  className="grid w-full gap-2"
-                                >
-                                  <Textarea
-                                    name="review"
-                                    className="max-h-32"
-                                    placeholder="Type your message here."
-                                  />
-                                  <DialogClose className="">
-                                    {" "}
-                                    <Button className="bg-primary/80 w-full text-white">
-                                      Send message
-                                    </Button>
-                                  </DialogClose>
-                                </form>
-                              </div>
-                            </div>
-                          </DialogHeader>
-                        </DialogContent>
-                      </Dialog>
-                    ) : (
-                      <Button variant="outline" className="w-full">
-                        {" "}
-                        N/A
-                      </Button>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>{" "}
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-    </div>}</div>
+                        <PaginationItem>
+                          <PaginationNext
+                            className={
+                              currentPages === totalPages
+                                ? "pointer-events-none cursor-not-allowed opacity-50"
+                                : "cursor-pointer"
+                            }
+                            onClick={() => {
+                              setCurrentPage(currentPages + 1);
+                            }}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>{" "}
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+      )}
+    </div>
   );
 }

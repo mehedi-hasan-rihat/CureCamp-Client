@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow,  TableFooter,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
@@ -16,9 +16,15 @@ import { MdDeleteForever } from "react-icons/md";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Dialog,
   DialogContent,
@@ -29,14 +35,18 @@ import toast from "react-hot-toast";
 export default function ManageCamp() {
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
+
+    const [totalPages, setToatalPages] = useState(null);
+    const [currentPages, setCurrentPage] = useState(1);
+  
   const { data, refetch } = useQuery({
     queryKey: ["camp"],
     queryFn: async () => {
-      console.log(4);
-      const response = await axiosPublic(`/campains?search=${""}&sortBy=${""}`);
-      setCamps(response.data);
-      console.log(response.data);
-      return response.data;
+      const response = await axiosPublic(`/campains/${currentPages}`);
+      setCamps(response.data.result);
+      setToatalPages(Math.ceil(response.data.totalData / 10));
+      return response.data.result;
+     
     },
   });
 
@@ -109,7 +119,32 @@ export default function ManageCamp() {
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody>
+          </TableBody> <TableFooter>
+                          <TableRow>
+                            <TableCell colSpan={5}>{`Showing ${currentPages} of ${totalPages} Pages`}</TableCell>
+                            <TableCell className="flex gap-1">
+                              <Pagination>
+                                <PaginationContent>
+                                  <PaginationItem>
+                                    <PaginationPrevious 
+                                    className={currentPages === 1 ? "pointer-events-none cursor-not-allowed opacity-50" : 'cursor-pointer'} onClick={()=>{
+                                      setCurrentPage(currentPages-1)
+                                      
+                                    }} />
+                                  </PaginationItem>
+          
+                                  <PaginationItem>
+                                    <PaginationNext  className={currentPages === totalPages  ? "pointer-events-none cursor-not-allowed opacity-50" : 'cursor-pointer'} onClick={()=>{
+                                      setCurrentPage(currentPages+1)
+                                    }} />
+                                  </PaginationItem>
+                                </PaginationContent>
+                              </Pagination>
+          
+                            
+                            </TableCell>
+                          </TableRow>
+                        </TableFooter>
         </Table>{" "}
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
