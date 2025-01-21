@@ -1,12 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../../hook/useAxiosPublic";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { ImgURL } from "../../../utils/imgUpload";
+import useAxiosSecure from "../../../hook/useAxioxSecure";
 export default function AddCamp() {
   
-  const axiosPublic = useAxiosPublic()
+  const axiosSecure= useAxiosSecure()
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ export default function AddCamp() {
       participantCount,
     };
     console.log(campData);
-   const { data : response} = await axiosPublic.post('add-camp',campData)
+   const { data : response} = await axiosSecure.post('add-camp',campData)
    if(response.insertedId){
     toast.success("Data Added Succesfully")
    }

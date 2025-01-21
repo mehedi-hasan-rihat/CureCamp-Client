@@ -10,7 +10,6 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { RxUpdate } from "react-icons/rx";
 import { MdDeleteForever } from "react-icons/md";
@@ -30,9 +29,10 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import UpdateCampain from "../../../component/Admin/UpdateCampain";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
+import useAxiosSecure from "../../../hook/useAxioxSecure";
 
 export default function ManageCamp() {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [camps, setCamps] = useState([]);
   const [search, setSearch] = useState('')
   const [totalPages, setToatalPages] = useState(null);
@@ -41,7 +41,7 @@ export default function ManageCamp() {
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["camp", currentPages, search],
     queryFn: async () => {
-      const response = await axiosPublic(`/campains/${currentPages}?search=${search}`);
+      const response = await axiosSecure(`/campains/${currentPages}?search=${search}`);
       setCamps(response.data.result);
       console.log(response.data.result);
       setToatalPages(Math.ceil(response.data.totalData / 10));
@@ -50,7 +50,7 @@ export default function ManageCamp() {
   });
 
   const campDelete = async (id) => {
-    const { data: res } = await axiosPublic.delete(`delete-camp/${id}`);
+    const { data: res } = await axiosSecure.delete(`delete-camp/${id}`);
     if (res.deletedCount) {
       refetch();
       toast.success("Data deleted Succesfully");

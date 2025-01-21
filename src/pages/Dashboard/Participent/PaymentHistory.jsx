@@ -17,12 +17,12 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";import { Input } from "@/components/ui/input"
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import useAuth from "../../../hook/useAuth";
+import useAxiosSecure from "../../../hook/useAxioxSecure";
 export default function PaymentHistory() {
   const { user } = useAuth();
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [totalPages, setToatalPages] = useState(null);
   const [currentPages, setCurrentPage] = useState(1);
   const [search, setSearch] = useState('')
@@ -31,7 +31,7 @@ export default function PaymentHistory() {
     queryKey: ["pament-history", currentPages, search],
     enabled: !!user,
     queryFn: async () => {
-      const response = await axiosPublic(`/payments/${user?.email}?page=${currentPages}&search=${search}`);
+      const response = await axiosSecure(`/payments/${user?.email}?page=${currentPages}&search=${search}`);
       setPaymentHistory(response.data.result);
       setToatalPages(Math.ceil(response.data.totalData / 10));
       return response.data.result;

@@ -10,7 +10,6 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { MdOutlineCancel } from "react-icons/md";
 import {
@@ -48,9 +47,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";import { Input } from "@/components/ui/input"
+import useAxiosSecure from "../../../hook/useAxioxSecure";
 
 export default function ManageRegisteredCamp() {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [camps, setCamps] = useState([]);
   const [totalData, setTotalData] = useState(null);
   const [totalPages, setToatalPages] = useState(null);
@@ -59,7 +59,7 @@ export default function ManageRegisteredCamp() {
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["manage-registered-camps", currentPages, search],
     queryFn: async () => {
-      const response = await axiosPublic(
+      const response = await axiosSecure(
         `/manage-registered-camps-pagination/${currentPages}?search=${search}`
       );
       setCamps(response.data.result);
@@ -70,7 +70,7 @@ export default function ManageRegisteredCamp() {
   });
 
   const campDelete = async (id) => {
-    const { data: res } = await axiosPublic.delete(`delete-reg-camp/${id}`);
+    const { data: res } = await axiosSecure.delete(`delete-reg-camp/${id}`);
     if (res.deletedCount) {
       refetch();
       toast.success("Data deleted Succesfully");
@@ -133,7 +133,7 @@ export default function ManageRegisteredCamp() {
                     <TableCell className="">
                       <Select
                         onValueChange={async (e) => {
-                          const response = await axiosPublic.patch(
+                          const response = await axiosSecure.patch(
                             `/update-confirmation-status/${camp._id}`,
                             { e }
                           );

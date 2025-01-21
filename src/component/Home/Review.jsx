@@ -25,7 +25,7 @@ export default function Review() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
+ 
       axiosPublic("/reviews")
         .then((res) => {
           console.log(res.data);
@@ -34,8 +34,8 @@ export default function Review() {
         .catch((error) => {
           console.log(error);
         });
-    }
-  }, [user]);
+    
+  }, []);
 
   return (
     <Container>

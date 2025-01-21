@@ -12,26 +12,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAuth from "../../hook/useAuth";
-import useAxiosPublic from "../../hook/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hook/useAxioxSecure";
 export default function MyProfile() {
   const { user, isloading } = useAuth();
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [userData, setuserData] = useState({});
   const { data, refetch } = useQuery({
     queryKey: ["userData"],
     enabled : !!user,
     queryFn: async () => {
-      const response = await axiosPublic(`/users/${user?.email}`);
+      const response = await axiosSecure(`/users/${user?.email}`);
       setuserData(response.data);
       return response.data;
     },
   });
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
-    const response = await axiosPublic.put(`/users/${user?.email}`, data);
+    const response = await axiosSecure.put(`/users/${user?.email}`, data);
     console.log(response.data);
     if(response.data.matchedCount){
         toast.success("updated !!")

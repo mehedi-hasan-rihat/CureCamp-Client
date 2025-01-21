@@ -13,12 +13,12 @@ import {
   AreaChart,
   Area,
 } from 'recharts';
-import useAxiosPublic from '../../../hook/useAxiosPublic';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hook/useAuth';
+import useAxiosSecure from '../../../hook/useAxioxSecure';
 
 const CampAnalyticsCharts = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [campData, setCampData] = useState([]);
 console.log(user);
@@ -26,7 +26,7 @@ console.log(user);
     queryKey: ['analytics-registered-camps', user],
     enabled: !!user,
     queryFn: async () => {
-      const response = await axiosPublic(`/analytics-registered-camps/${user?.email}`);
+      const response = await axiosSecure(`/analytics-registered-camps/${user?.email}`);
       setCampData(response.data);
       return response.data;
     },

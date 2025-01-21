@@ -26,7 +26,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { MdOutlineCancel } from "react-icons/md";
 import {
@@ -59,6 +58,7 @@ import PaymentForm from "./PaymentForm";
 import useAuth from "../../../hook/useAuth";
 import ReactStars from "react-rating-stars-component";
 import { DialogClose } from "@radix-ui/react-dialog";
+import useAxiosSecure from "../../../hook/useAxioxSecure";
 export default function RegisteredCamps() {
   const { user } = useAuth();
   const [rating, setRating] = useState(0);
@@ -66,13 +66,13 @@ export default function RegisteredCamps() {
   const [totalPages, setToatalPages] = useState(null);
   const [currentPages, setCurrentPage] = useState(1);
 
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [camps, setCamps] = useState([]);  const [search, setSearch] = useState('')
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["camp", currentPages,search],
     enabled: !!user,
     queryFn: async () => {
-      const response = await axiosPublic(
+      const response = await axiosSecure(
         `/registered-camps/${user?.email}?page=${currentPages}&search=${search}`
       );
       setCamps(response.data.result);
@@ -83,7 +83,7 @@ export default function RegisteredCamps() {
   });
   console.log(camps);
   const campDelete = async (id) => {
-    const { data: res } = await axiosPublic.delete(`delete-reg-camp/${id}`);
+    const { data: res } = await axiosSecure.delete(`delete-reg-camp/${id}`);
     if (res.deletedCount) {
       refetch();
       toast.success("Data deleted Succesfully");
@@ -103,7 +103,7 @@ export default function RegisteredCamps() {
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(e.target.review.value, rating);
-    const { data } = await axiosPublic.post("/reviews", {
+    const { data } = await axiosSecure.post("/reviews", {
       name: user?.displayName,
       profile_image: user?.photoURL,
       email: user?.email,

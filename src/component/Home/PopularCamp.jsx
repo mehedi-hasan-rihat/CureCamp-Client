@@ -10,7 +10,7 @@ export default function PopularCamp() {
   const [popularCampain, setPopularCampain] = useState([]);
 
   useEffect(() => {
-    if(user){
+  
       axiosPublic("/popular-campain")
       .then((res) => {
         console.log(res.data);
@@ -19,8 +19,8 @@ export default function PopularCamp() {
       .catch((error) => {
         console.log(error);
       });
-    }
-  }, [user]);
+    
+  }, []);
   
   
   return (
