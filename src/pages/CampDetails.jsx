@@ -17,10 +17,12 @@ import useAuth from "../hook/useAuth";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../hook/useAxiosSecure";
 export default function CampDetails() {
   const { id } = useParams();
   const [camp, setCamp] = useState([]);
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure()
   const { user } = useAuth();
 
   const { data, refetch } = useQuery({
@@ -55,7 +57,7 @@ export default function CampDetails() {
       ...values,
       campainId: _id,
     };
-    const { data } = await axiosPublic.post(
+    const { data } = await axiosSecure.post(
       "/register-campain",
       participantData
     );
@@ -91,9 +93,7 @@ export default function CampDetails() {
               </div>
               <p className="text-[15px] leading-normal mt-3 font-medium">
                 {description}
-                {description}
-                {description}
-                {description}
+
               </p>
             </div>
             <div className="flex-1">

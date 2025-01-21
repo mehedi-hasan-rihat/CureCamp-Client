@@ -53,7 +53,7 @@ export default function CampCard({ camp }) {
         </div>
         <div className="mt-4">
           <p className="text-pretty text-sm text-gray-500">
-            {description.slice(0, 200)}...
+            {description.slice(0, 100)}...
           </p>
         </div>
       </div>

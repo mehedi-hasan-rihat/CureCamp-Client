@@ -1,7 +1,7 @@
-import useAxiosPublic from '../hook/useAxiosPublic';
+import useAxiosSecure from "./useAxiosSecure";
 
 export default function useSaveUsers() {
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     const saveUsers = async (user) => {
         const userData = {
@@ -13,7 +13,7 @@ export default function useSaveUsers() {
         console.log(userData);
 
         try {
-            const { data } = await axiosPublic.post('/users', userData);
+            const { data } = await axiosSecure.post('/users', userData);
             console.log('User saved:', data);
             return data;
         } catch (error) {

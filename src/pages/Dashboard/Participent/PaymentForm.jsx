@@ -5,23 +5,22 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
 import useAuth from "../../../hook/useAuth";
-import { DialogClose, DialogTrigger } from "@radix-ui/react-dialog";
+import useAxiosSecure from "../../../hook/useAxiosSecure";
 export default function StripeForm({ camp, setIsOpen, refetch }) {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
   const { user } = useAuth();
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   useEffect(() => {
     getPaymentIntent();
   }, []);
 
-  // console.log(clientSecret);
 
   const getPaymentIntent = async () => {
     try {
-      const { data } = await axiosPublic.post("/payment-intent", {
+      const { data } = await axiosSecure.post("/payment-intent", {
         campId: camp.campId,
       });
 
@@ -72,7 +71,7 @@ export default function StripeForm({ camp, setIsOpen, refetch }) {
     console.log(paymentIntent);
     if (paymentIntent?.status == "succeeded") {
       try {
-        await axiosPublic.post("/payments", {
+        await axiosSecure.post("/payments", {
           participantName: user?.displayName,
           participantEmail: user?.email,
           participantId: camp?._id,
