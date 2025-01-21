@@ -15,7 +15,7 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "@/components/ui/pagination";import { Input } from "@/components/ui/input"
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -25,13 +25,13 @@ export default function PaymentHistory() {
   const axiosPublic = useAxiosPublic();
   const [totalPages, setToatalPages] = useState(null);
   const [currentPages, setCurrentPage] = useState(1);
-
+  const [search, setSearch] = useState('')
   const [paymentHistory, setPaymentHistory] = useState([]);
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["pament-history"],
+    queryKey: ["pament-history", currentPages, search],
     enabled: !!user,
     queryFn: async () => {
-      const response = await axiosPublic(`/payments/${user?.email}?page=${currentPages}`);
+      const response = await axiosPublic(`/payments/${user?.email}?page=${currentPages}&search=${search}`);
       setPaymentHistory(response.data.result);
       setToatalPages(Math.ceil(response.data.totalData / 10));
       return response.data.result;
@@ -44,7 +44,14 @@ export default function PaymentHistory() {
       <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
         Manage Registered Camps
       </h1>
-
+ <Input
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          type="text"
+          className="w-52"
+          placeholder="Search"
+        />
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
           <p className="text-lg font-semibold text-gray-500">Loading data...</p>

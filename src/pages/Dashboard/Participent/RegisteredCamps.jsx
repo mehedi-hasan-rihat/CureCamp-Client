@@ -49,7 +49,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Textarea } from "@/components/ui/textarea";
-
+import { Input } from "@/components/ui/input"
 import { VscFeedback } from "react-icons/vsc";
 import { Button } from "@/components/ui/button";
 import { MdOutlineDoneAll } from "react-icons/md";
@@ -67,13 +67,13 @@ export default function RegisteredCamps() {
   const [currentPages, setCurrentPage] = useState(1);
 
   const axiosPublic = useAxiosPublic();
-  const [camps, setCamps] = useState([]);
+  const [camps, setCamps] = useState([]);  const [search, setSearch] = useState('')
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["camp"],
+    queryKey: ["camp", currentPages,search],
     enabled: !!user,
     queryFn: async () => {
       const response = await axiosPublic(
-        `/registered-camps/${user?.email}?page=${currentPages}`
+        `/registered-camps/${user?.email}?page=${currentPages}&search=${search}`
       );
       setCamps(response.data.result);
       console.log(response.data.result, (Math.ceil(response.data.totalData / 10)) );
@@ -119,7 +119,14 @@ export default function RegisteredCamps() {
       <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
         Registered Camps
       </h1>
-
+      <Input
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          type="text"
+          className="w-52"
+          placeholder="Search"
+        />
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
           <p className="text-lg font-semibold text-gray-500">Loading data...</p>

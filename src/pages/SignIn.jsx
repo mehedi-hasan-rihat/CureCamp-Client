@@ -3,16 +3,17 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { ImgURL } from "../utils/imgUpload";
 import useAuth from "../hook/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
 export default function SignIn() {
   const { signIn } = useAuth();
   const navigate = useNavigate()
+  const location = useLocation()
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
     signIn(data.email, data.password).then((result) => {
       const loggedUser = result.user;
-      navigate('/')
+      navigate(location?.state?.from?.pathname || '/')
       toast.success('Successfully Login!')
     });
   };

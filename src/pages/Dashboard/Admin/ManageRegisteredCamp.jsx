@@ -47,19 +47,20 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "@/components/ui/pagination";import { Input } from "@/components/ui/input"
+
 export default function ManageRegisteredCamp() {
   const axiosPublic = useAxiosPublic();
   const [camps, setCamps] = useState([]);
   const [totalData, setTotalData] = useState(null);
   const [totalPages, setToatalPages] = useState(null);
   const [currentPages, setCurrentPage] = useState(1);
-
+  const [search, setSearch] = useState('')
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["manage-registered-camps", currentPages],
+    queryKey: ["manage-registered-camps", currentPages, search],
     queryFn: async () => {
       const response = await axiosPublic(
-        `/manage-registered-camps-pagination/${currentPages}`
+        `/manage-registered-camps-pagination/${currentPages}?search=${search}`
       );
       setCamps(response.data.result);
       setTotalData(response.data.totalData);
@@ -82,7 +83,14 @@ export default function ManageRegisteredCamp() {
       <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
         Manage Registered Camps
       </h1>
-
+<Input
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          type="text"
+          className="w-52"
+          placeholder="Search"
+        />
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
           <p className="text-lg font-semibold text-gray-500">Loading data...</p>
