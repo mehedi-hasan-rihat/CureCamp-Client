@@ -17,7 +17,7 @@ export default function Hero() {
       <CarouselContent className="h-[60vh] md:h-[80vh]">
         {ImgArray.map( (img,indx) => (
           <CarouselItem key={indx}>
-            <div className="p-1 h-full w-full">
+            <div className="h-full w-full">
               <img
                 src={img}
                 alt=""
