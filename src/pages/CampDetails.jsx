@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/Dialog_2";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAuth from "../hook/useAuth";
@@ -300,6 +300,9 @@ export default function CampDetails() {
                           </div>{" "}
                           <button className="text-white bg-primary px-5 py-2 rounded">
                             Submit
+                          </button>
+                          <button onClick={()=> setIsOpen(false)} variant="outline" type="button" className="ml-2 border border-gray-400  px-5 py-2 rounded">
+                           Cancle
                           </button>
                         </form>
                       </DialogContent>

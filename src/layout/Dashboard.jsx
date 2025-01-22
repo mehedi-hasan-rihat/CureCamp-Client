@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
 import { HiBackward } from "react-icons/hi2";
+import { Helmet } from 'react-helmet-async';
+
 import useRole from "../hook/useRole";
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,7 +14,7 @@ const Dashboard = () => {
   const [role, isLoading] = useRole();
   if (isLoading) return <p>Loading</p>;
   return (
-    <div>
+    <div> <Helmet>  <title>Cure Camp | Dashboard</title></Helmet>
       <div
         className={`fixed inset-y-0 left-0 z-40 w-64 bg-blue-500/90 text-white transform transition-transform duration-300 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"

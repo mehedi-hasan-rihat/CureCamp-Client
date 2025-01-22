@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import AuthProvider from "./Auth/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import {  HelmetProvider } from 'react-helmet-async';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,7 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <TooltipProvider>
           {" "}
-          <RouterProvider router={router}></RouterProvider>
+       <HelmetProvider>   <RouterProvider router={router}></RouterProvider></HelmetProvider>
         </TooltipProvider>
 
         <Toaster />
