@@ -39,9 +39,9 @@ export default function Review() {
 
   return (
     <Container>
-      <div className="bg-gradient-to-r from-primary to-btn-hover px-4 pt-8 pb-16 md:px-8 md:py-14 rounded-xl my-16 md:my-28">
+      <div className="bg-gradient-to-r from-[#6C63FF] to-[#5954bb] px-4 pt-8 pb-16 md:px-8 md:py-14 rounded-xl my-16 md:my-28">
         <div className="flex flex-col items-center justify-center gap-14 text-center ">
-        <div className=" flex flex-col items-center justify-center text-center my-2 md:my-10 max-w-2xl mx-auto">
+        <div className=" flex flex-col items-center justify-center text-center max-w-2xl mx-auto">
             <h3 className="text-2xl text-white md:text-3xl font-semibold secondary-font">
               Hear From Our Happy Campers
             </h3>

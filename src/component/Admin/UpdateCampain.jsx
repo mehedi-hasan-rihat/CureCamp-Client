@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { ImgURL } from "../../utils/imgUpload";
-import useAxiosPublic from "../../hook/useAxiosPublic";
+
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hook/useAxioxSecure";
 
 export default function UpdateCampain({ camp }) {
   const {
@@ -29,20 +30,20 @@ export default function UpdateCampain({ camp }) {
     register,
     formState: { errors },
   } = useForm();
-  const axiosPublic = useAxiosPublic()
+  const axiosSecure = useAxiosSecure()
 
   const onSubmit = async (data) => {
     const time = data.startTime.concat(" - ", data.endTime);
-    const {image, ...rest } = data;
-    const imgURL = await ImgURL(data.image[0])
+    const {...rest } = data;
     const campData = {
       ...rest,
       time,
-      image:imgURL,
+      image,
       participantCount,
     };
     console.log(campData);
-   const { data : response} = await axiosPublic.patch(`update-camp/${_id}`,campData)
+   const { data : response} = await axiosSecure.patch(`update-camp/${_id}`,campData)
+   console.log(response);
    if(response.modifiedCount){
     toast.success("Data Updated Succesfully")
    }
@@ -55,7 +56,7 @@ export default function UpdateCampain({ camp }) {
           Update Campain
         </DialogTitle>
       </DialogHeader>
-      <div className=" mx-auto p-6 bg-gray-50 shadow-lg rounded-lg">
+      <div className=" mx-auto p-1 md:p-6 bg-gray-50 shadow-lg rounded-lg">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 "
@@ -78,24 +79,6 @@ export default function UpdateCampain({ camp }) {
             {errors.campName && (
               <p className="text-red-500 text-sm">{errors.campName.message}</p>
             )}
-          </div>
-
-          {/* Image */}
-          <div>
-            <label
-              htmlFor="image"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Camp Image
-            </label>
-            <Input
-              className="text-sm mt-1 cursor-pointer"
-              type="file"
-              name="image"
-              id="image"
-              accept="image/*"
-              {...register("image", { required: "Required" })}
-            />
           </div>
 
           {/* Camp Fees */}
@@ -122,26 +105,7 @@ export default function UpdateCampain({ camp }) {
             )}
           </div>
 
-          {/* Date */}
-          <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Date
-            </label>
-            <input
-              id="date"
-              type="date"
-              defaultValue={date}
-              {...register("date", { required: "Date is required" })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-            {errors.date && (
-              <p className="text-red-500 text-sm">{errors.date.message}</p>
-            )}
-          </div>
-
+      
           {/* Time Range */}
           <div className="col-span-1 md:col-span-2 grid grid-cols-2 gap-4">
             <div>
@@ -227,6 +191,25 @@ export default function UpdateCampain({ camp }) {
               <p className="text-red-500 text-sm">
                 {errors.healthcareProfessional.message}
               </p>
+            )}
+          </div>
+    {/* Date */}
+    <div className="col-span-2">
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date
+            </label>
+            <input
+              id="date"
+              type="date"
+              defaultValue={date}
+              {...register("date", { required: "Date is required" })}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            />
+            {errors.date && (
+              <p className="text-red-500 text-sm">{errors.date.message}</p>
             )}
           </div>
 

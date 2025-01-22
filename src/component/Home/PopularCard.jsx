@@ -19,12 +19,12 @@ export default function PopularCard({ campData }) {
     time,_id
   } = campData || {};
   return (
-    <div className="rounded-lg p-2 hover:shadow-md border border-gray-200 duration-300 shadow-indigo-100 flex flex-col gap-5">
-      <div className="h-[90%]">
+    <div className="rounded-lg p-2 hover:shadow-md group border border-gray-200 duration-300 shadow-indigo-100 flex flex-col gap-5">
+      <div className="h-[90%] overflow-hidden rounded-md">
         <img
           alt=""
           src={image}
-          className="h-56 w-full rounded-md object-cover mb-4"
+          className="h-56 w-full group-hover:scale-110 duration-500 rounded-md object-cover mb-4"
         />
 
         <div className=" xl:px-3">

@@ -88,7 +88,7 @@ export default function Navbar() {
             </DropdownMenu>
           ) : (
             <NavLink to="/auth/signin" className="">
-              <Button className="bg-transparent border border-primary  font-semibold px-5 text-black hover:text-white">
+              <Button className="bg-transparent border border-white text-white  font-semibold px-5 ">
                 Join Us
               </Button>
             </NavLink>

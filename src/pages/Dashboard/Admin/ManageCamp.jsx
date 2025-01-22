@@ -9,6 +9,18 @@ import {
   TableRow,
   TableFooter,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { useQuery } from "@tanstack/react-query";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { RxUpdate } from "react-icons/rx";
@@ -34,14 +46,16 @@ import useAxiosSecure from "../../../hook/useAxioxSecure";
 export default function ManageCamp() {
   const axiosSecure = useAxiosSecure();
   const [camps, setCamps] = useState([]);
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
   const [totalPages, setToatalPages] = useState(null);
   const [currentPages, setCurrentPage] = useState(1);
 
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["camp", currentPages, search],
     queryFn: async () => {
-      const response = await axiosSecure(`/campains/${currentPages}?search=${search}`);
+      const response = await axiosSecure(
+        `/campains/${currentPages}?search=${search}`
+      );
       setCamps(response.data.result);
       console.log(response.data.result);
       setToatalPages(Math.ceil(response.data.totalData / 10));
@@ -61,7 +75,7 @@ export default function ManageCamp() {
     <div className="">
       <div className="mb-4">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 ">
-          Manage Registered Camps
+          Manage Camps
         </h1>
 
         <Input
@@ -134,12 +148,12 @@ export default function ManageCamp() {
                         </TooltipContent>
                       </Tooltip>
 
-                      <Tooltip>
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                        <Tooltip>
                         <TooltipTrigger>
                           <p
-                            onClick={() => {
-                              campDelete(camp._id);
-                            }}
+                            
                             className="p-2 hover:bg-gray-200/50 hover:scale-105 duration-300 hover:shadow rounded-full"
                           >
                             <MdDeleteForever />
@@ -149,6 +163,33 @@ export default function ManageCamp() {
                           <p>Delete Campain</p>
                         </TooltipContent>
                       </Tooltip>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete This registered camp and remove
+                              this data from our servers.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="text-white"
+                              onClick={() => {
+                                campDelete(camp._id);
+                              }}
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+
+                    
                     </TableCell>
                   </TableRow>
                 ))}

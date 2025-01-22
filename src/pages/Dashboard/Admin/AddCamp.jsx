@@ -5,8 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ImgURL } from "../../../utils/imgUpload";
 import useAxiosSecure from "../../../hook/useAxioxSecure";
 export default function AddCamp() {
-  
-  const axiosSecure= useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
@@ -15,30 +14,30 @@ export default function AddCamp() {
 
   const onSubmit = async (data) => {
     const time = data.startTime.concat(" - ", data.endTime);
-    const {image, ...rest } = data;
+    const { image, ...rest } = data;
     const participantCount = 0;
-    const imgURL = await ImgURL(data.image[0])
+    const imgURL = await ImgURL(data.image[0]);
     const campData = {
       ...rest,
       time,
-      image:imgURL,
+      image: imgURL,
       participantCount,
     };
     console.log(campData);
-   const { data : response} = await axiosSecure.post('add-camp',campData)
-   if(response.insertedId){
-    toast.success("Data Added Succesfully")
-   }
+    const { data: response } = await axiosSecure.post("add-camp", campData);
+    if (response.insertedId) {
+      toast.success("Data Added Succesfully");
+    }
   };
   return (
     <div className="flex items-center justify-center h-full px-5">
-      <div className=" mx-auto p-6 bg-[#f5faff] shadow rounded-md">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-800 text-center">
+      <div className=" mx-auto p-6 bg-[#f5faff]  rounded-md">
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800 ">
           Camp Registration
         </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 w-[320px] sm:w-[500px] md:w-[700px] xl:w-[800px] "
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 w-[320px] sm:w-[500px] md:w-[600px] xl:w-[800px] "
         >
           {/* Camp Name */}
           <div>
@@ -68,13 +67,16 @@ export default function AddCamp() {
               Camp Image
             </label>
             <Input
-                    className="text-sm mt-1 cursor-pointer"
-                    type="file"
-                    name="image"
-                    id="image"
-                    accept="image/*"
-                    {...register("image",  {  required: "Required",})}
-                  />
+              className="text-sm mt-1 cursor-pointer"
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+              {...register("image", { required: "Required" })}
+            />
+              {errors.image && (
+              <p className="text-red-500 text-sm">{errors.image.message}</p>
+            )}
           </div>
 
           {/* Camp Fees */}
@@ -202,8 +204,6 @@ export default function AddCamp() {
               </p>
             )}
           </div>
-
-         
 
           {/* Description */}
           <div className="col-span-1 md:col-span-2">

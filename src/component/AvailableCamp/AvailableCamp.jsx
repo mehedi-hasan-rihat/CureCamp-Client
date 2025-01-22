@@ -36,9 +36,14 @@ export default function AvailableCampsPage() {
 
   return (
     <Container>
-      <h2 className="text-center text-3xl font-semibold my-10">
-        Available Camps
-      </h2>
+      <div className=" flex flex-col items-center justify-center text-center max-w-2xl mx-auto mb-5 md:mb-10">
+            <h3 className="text-2xl md:text-3xl font-semibold secondary-font">
+            Explore Our Camps
+            </h3>
+            <p className="mt-px md:mt-2 text-xs md:text-base font-medium ">
+            From serene landscapes to action-packed adventures, discover what makes each Medi Camp unique. Dive into stories of joy, relaxation, and unforgettable moments shared by our campers. Find the perfect camp for your magical getaway!
+            </p>
+          </div>
 
       <div className="flex justify-between gap-2 my-2">
         <form className="flex gap-2">

@@ -22,9 +22,9 @@ export default function CampDetails() {
   const { id } = useParams();
   const [camp, setCamp] = useState([]);
   const axiosPublic = useAxiosPublic();
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
-
+  const [isOpen, setIsOpen] = useState(false);
   const { data, refetch } = useQuery({
     queryKey: ["camp", id],
     queryFn: async () => {
@@ -62,7 +62,8 @@ export default function CampDetails() {
       participantData
     );
     if (data.insertedId) {
-      toast.success("Succesfully Registerd the Campain !")
+      toast.success("Succesfully Registerd the Campain !");
+      setIsOpen(false)
       refetch();
     }
   };
@@ -93,7 +94,6 @@ export default function CampDetails() {
               </div>
               <p className="text-[15px] leading-normal mt-3 font-medium">
                 {description}
-
               </p>
             </div>
             <div className="flex-1">
@@ -126,12 +126,17 @@ export default function CampDetails() {
                     className="group relative inline-block focus:outline-none focus:ring mt-4 disabled:cursor-not-allowed disabled:bg-gray-50"
                   >
                     <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-primary transition-transform group-hover:translate-x-0 group-hover:translate-y-0 group-disabled:bg-primary/50 opacity-50"></span>
-                    <Dialog>
-                      <DialogTrigger asChild>
+                    <Dialog open={isOpen}>
+                      <p
+                        onClick={() => {
+                          console.log(4);
+                          setIsOpen(true);
+                        }}
+                      >
                         <span className="relative inline-block border-2 border-black/60 group-disabled:opacity-70 group-disabled:text-gray-400 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75 ">
                           Join Now
                         </span>
-                      </DialogTrigger>
+                      </p>
                       <DialogContent className="sm:max-w-[580px] overflow-y-auto max-h-[50vh] rounded-md">
                         <DialogHeader>
                           <DialogTitle>Register Camp</DialogTitle>
@@ -188,7 +193,6 @@ export default function CampDetails() {
                               />
                             </div>
                           </div>
-
                           <div className="flex flex-col sm:flex-row gap-3">
                             {" "}
                             <div className="w-full">
@@ -213,7 +217,6 @@ export default function CampDetails() {
                               />
                             </div>
                           </div>
-
                           <div className="flex flex-col sm:flex-row  gap-3">
                             {" "}
                             <di className="w-full" v>
@@ -221,30 +224,45 @@ export default function CampDetails() {
                               <Input
                                 id="age"
                                 type="number"
-                                {...register("participantAge")}
+                                {...register("participantAge", {
+                                  required: "age is required",
+                                })}
                                 placeholder="Enter your age"
                                 className="mt-1"
                               />
+                              {errors.age && (
+                                <p className="text-red-500 text-sm">
+                                  {errors.age.message}
+                                </p>
+                              )}
                             </di>
                             <div className="w-full">
                               <Label htmlFor="phone">Phone Number</Label>
                               <Input
                                 id="phone"
                                 type="tel"
-                                {...register("participantPhone")}
+                                {...register("participantPhone", {
+                                  required: "Number is required",
+                                })}
                                 placeholder="Enter your phone number"
                                 className="mt-1"
                               />
+                              {errors.participantPhone && (
+                                <p className="text-red-500 text-sm">
+                                  {errors.participantPhone.message}
+                                </p>
+                              )}
                             </div>
                           </div>
-
                           <div className="flex flex-col sm:flex-row gap-3 items-center">
                             {" "}
                             <div className="w-full">
                               <Label htmlFor="gender">Gender</Label>
                               <select
                                 id="gender"
-                                {...register("participantGender")}
+                                {...register("participantGender", {
+                                  required: "Gender is required",
+                                })}
                                 className="mt-1 w-full h-9 border rounded"
                               >
                                 <option disabled value="">
@@ -254,24 +272,35 @@ export default function CampDetails() {
                                 <option value="female">Female</option>
                                 <option value="other">Other</option>
                               </select>
+                              {errors.participantGender && (
+                                <p className="text-red-500 text-sm">
+                                  {errors.participantGender.message}
+                                </p>
+                              )}
                             </div>
                             <div className="w-full">
                               <Label htmlFor="emergencyContact">
                                 Emergency Contact
                               </Label>
                               <Input
-                                {...register("participantEmergencyContact")}
+                                {...register("participantEmergencyContact", {
+                                  required: "Emergency number is required",
+                                })}
                                 id="emergencyContact"
                                 type="tel"
                                 placeholder="Enter emergency contact number"
                                 className="mt-1"
                               />
+                              {errors.participantEmergencyContact && (
+                                <p className="text-red-500 text-sm">
+                                  {errors.participantEmergencyContact.message}
+                                </p>
+                              )}
                             </div>
-                          </div>
-
-                        <DialogTrigger>  <button className="text-white bg-primary px-5 py-2 rounded">
+                          </div>{" "}
+                          <button className="text-white bg-primary px-5 py-2 rounded">
                             Submit
-                          </button></DialogTrigger>
+                          </button>
                         </form>
                       </DialogContent>
                     </Dialog>
