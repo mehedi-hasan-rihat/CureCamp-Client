@@ -1,18 +1,18 @@
 # **[Website Name: Medical Camp Management System]**
 
 ### **Live Site URL:**  
-[Visit Live Website](https://your-live-site-url.com)
+[Visit Live Website](https://curecamp.netlify.app)
 
 ---
 
 ## **Organizer Login Credentials**  
-- **Username:** organizer@example.com  
-- **Password:** organizer123  
+- **Username:** org@gmail.com 
+- **Password:** admin121 
 
 ---
 
 ## **About the Website**
-The Medical Camp Management System is a web-based application designed to efficiently manage and organize medical camps. It provides a seamless experience for participants, organizers, and healthcare professionals. Below are the key features of this project:
+The Medical Camp Management System is a web-based application designed to efficiently manage and organize medical camps. It provides a seamless experience for participants and organizers. Below are the key features of this project:
 
 ### **Key Features**
 1. **User-Friendly Navigation:**  
@@ -22,7 +22,7 @@ The Medical Camp Management System is a web-based application designed to effici
    - A stunning slider showcasing success stories and impactful moments from past medical camps.
 
 3. **Popular Camps Section:**  
-   - Displays a maximum of 6 camps with the highest participant count, featuring key details like camp name, fees, date, location, and healthcare professional info.
+   - Displaying 6 camps with the highest participant count, featuring key details like camp name, fees, date, location, and healthcare professional info.
 
 4. **Camp Details Page:**  
    - Detailed information about each camp, including a "Join Camp" button to register.
@@ -58,15 +58,10 @@ The Medical Camp Management System is a web-based application designed to effici
 ---
 
 ## **Tech Stack**
-- **Frontend:** React.js, React Hook Form, Tailwind CSS, Material UI, SwiperJS
+- **Frontend:** React.js, React Hook Form, Tailwind CSS, Shadcn
 - **Backend:** Node.js, Express.js, MongoDB
 - **Authentication:** Firebase Authentication, JWT
 - **Payment:** Stripe
 - **Charts Library:** Recharts
 
 ---
-
-## **How to Run the Project Locally**
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/your-username/medical-camp-management-system.git
