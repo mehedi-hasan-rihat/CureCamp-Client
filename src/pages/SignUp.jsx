@@ -9,7 +9,7 @@ import useSaveUsers from "../hook/useSaveUsers";
 export default function SignUp() {
   const navigate = useNavigate();
   const saveUser = useSaveUsers();
-  const { createUser, updateUserProfile} = useAuth();
+  const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth();
 
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
@@ -22,7 +22,7 @@ export default function SignUp() {
         .then(() => {
           navigate("/");
           console.log(loggedUser);
-          saveUser(loggedUser)
+          saveUser(loggedUser);
           toast.success("Successfully Signup!");
         })
         .catch((error) => console.log(error));
@@ -40,7 +40,7 @@ export default function SignUp() {
             />
 
             <div className="hidden lg:relative lg:block lg:p-12">
-              <a className="block text-white" href="#">
+              <p className="block text-white" href="#">
                 <span className="sr-only">Home</span>
                 <svg
                   className="h-8 sm:h-10"
@@ -53,15 +53,14 @@ export default function SignUp() {
                     fill="currentColor"
                   />
                 </svg>
-              </a>
+              </>
 
               <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
-                Welcome to Squid 🦑
+              "Join Us Today!" 🦑
               </h2>
 
               <p className="mt-4 leading-relaxed text-white/90">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+              Start your adventure—one step closer to your goals
               </p>
             </div>
           </section>
@@ -69,7 +68,7 @@ export default function SignUp() {
           <main className="flex  items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
             <div className="max-w-xl lg:max-w-3xl ">
               <div className="relative -mt-16 block lg:hidden">
-                <a
+                <p
                   className="inline-flex size-16 items-center justify-center rounded-full bg-white text-blue-600 sm:size-20"
                   href="#"
                 >
@@ -85,15 +84,14 @@ export default function SignUp() {
                       fill="currentColor"
                     />
                   </svg>
-                </a>
+                </p>
 
                 <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                  Welcome to Squid 🦑
+                "Join Us Today!" 🦑
                 </h1>
 
                 <p className="mt-4 leading-relaxed text-gray-500">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+                Start your adventure—one step closer to your goals
                 </p>
               </div>
 
@@ -126,13 +124,8 @@ export default function SignUp() {
                     accept="image/*"
                     {...register("image", { required: "Required" })}
                   />
-                </div>
-                <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                  <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                    Create an account
-                  </button>
-
-                  <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                  
+                </div><p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Already have an account?
                     <Link
                       to="/auth/signin"
@@ -142,6 +135,24 @@ export default function SignUp() {
                     </Link>
                     .
                   </p>
+                <div className="col-span-6 mt-3 sm:flex sm:items-center sm:gap-4">
+                  <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+                    Create an account
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+
+
+                     const data = await signInWithGoogle()
+                      console.log(data.user);
+                      console.log(loading);
+                      saveUser(data.user).then(res => navigate('/'))
+                    }}
+                    className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                  >
+                    Login With Google
+                  </button>
                 </div>
               </form>
             </div>

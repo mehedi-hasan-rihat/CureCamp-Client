@@ -70,6 +70,7 @@ export default function StripeForm({ camp, setIsOpen, refetch }) {
 
     console.log(paymentIntent);
     if (paymentIntent?.status == "succeeded") {
+      toast.success(`You tnx id id ${paymentIntent.id}`)
       try {
         await axiosSecure.post("/payments", {
           participantName: user?.displayName,
@@ -77,7 +78,7 @@ export default function StripeForm({ camp, setIsOpen, refetch }) {
           participantId: camp?._id,
           tnxId: paymentIntent.id,
         });
-        toast.success("Order Succesfull");
+
         setIsOpen(false);
         refetch()
         

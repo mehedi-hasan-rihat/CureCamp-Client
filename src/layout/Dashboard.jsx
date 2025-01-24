@@ -20,7 +20,7 @@ const Dashboard = () => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        <div className="flex flex-col p-5 min-h-screen">
+        <div className="flex flex-col p-5 min-h-screen overflow-y-auto">
           <div className="flex justify-between items-center mb-5">
             <h2 className="text-xl font-bold">Dashboard</h2>
             <button onClick={toggleSidebar} className="md:hidden text-white">

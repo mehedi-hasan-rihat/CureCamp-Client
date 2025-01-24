@@ -72,7 +72,7 @@ export default function Navbar() {
                 </DropdownMenuLabel>
 
                 <DropdownMenuGroup>
-                  <NavLink to={"dashboard"} className="">
+                  <NavLink to={"/dashboard"} className="">
                     <DropdownMenuItem className="text-md hover:bg-gray-200 ">
                       Dashboard
                     </DropdownMenuItem>

@@ -3,6 +3,8 @@ import PopularCard from "./PopularCard";
 import Container from "../sharedComponent/Container";
 import useAuth from "../../hook/useAuth";
 import useAxiosPublic from "../../hook/useAxiosPublic";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function PopularCamp() {
   const axiosPublic = useAxiosPublic();
@@ -44,6 +46,8 @@ export default function PopularCamp() {
           ))}
         </div>
       </div>
+
+    <Link to={'/available-campain'} className="w-full block text-center mt-10">  <Button className='text-white'>See all Camp</Button></Link>
     </Container>
   );
 }

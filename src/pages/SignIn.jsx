@@ -6,7 +6,7 @@ import useAuth from "../hook/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
 export default function SignIn() {
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate()
   const location = useLocation()
   const { register, handleSubmit } = useForm();
@@ -29,7 +29,7 @@ export default function SignIn() {
             />
 
             <div className="hidden lg:relative lg:block lg:p-12">
-              <a className="block text-white" href="#">
+              <p className="block text-white" href="#">
                 <span className="sr-only">Home</span>
                 <svg
                   className="h-8 sm:h-10"
@@ -42,15 +42,14 @@ export default function SignIn() {
                     fill="currentColor"
                   />
                 </svg>
-              </a>
+              </p>
 
               <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
-                Welcome to Squid 🦑
+              Welcome Back! 🦑
               </h2>
 
               <p className="mt-4 leading-relaxed text-white/90">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+              Log in to continue your journey with us
               </p>
             </div>
           </section>
@@ -58,7 +57,7 @@ export default function SignIn() {
           <main className="flex  items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
             <div className="max-w-xl lg:max-w-3xl ">
               <div className="relative -mt-16 block lg:hidden">
-                <a
+                <p
                   className="inline-flex size-16 items-center justify-center rounded-full bg-white text-blue-600 sm:size-20"
                   href="#"
                 >
@@ -74,15 +73,14 @@ export default function SignIn() {
                       fill="currentColor"
                     />
                   </svg>
-                </a>
+                </p>
 
                 <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                  Welcome to Squid 🦑
+                Welcome Back! 🦑
                 </h1>
 
                 <p className="mt-4 leading-relaxed text-gray-500">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+                Log in to continue your journey with us
                 </p>
               </div>
 
@@ -99,13 +97,6 @@ export default function SignIn() {
                     type="password"
                     placeholder="Password"
                   />
-                </div>
-
-                <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                  <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                   LogIn
-                  </button>
-
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                      haven't any account?
                     <Link to='/auth/signup' className="text-gray-700 ml-1 underline">
@@ -114,6 +105,20 @@ export default function SignIn() {
                     .
                   </p>
                 </div>
+                <div className="col-span-6 flex flex-col md:flex-row sm:items-center gap-4">
+                  <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+                   LogIn
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      signInWithGoogle()
+                    }}
+                    className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                  >
+                    Login With Google
+                  </button>
+                 </div>
               </form>
             </div>
           </main>

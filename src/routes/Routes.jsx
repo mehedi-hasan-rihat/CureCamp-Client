@@ -18,11 +18,12 @@ import PaymentHistory from "../pages/Dashboard/Participent/PaymentHistory";
 import Profile from "../pages/Dashboard/Profile";
 import AdminRoute from "./adminRoute";
 import PrivateRoute from "./PrivateRoute";
-
+import ErrorPage from "../pages/ErrorPage";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Mainlayout />,
+    errorElement: <ErrorPage/>,
     children: [
       {
         path: "/",

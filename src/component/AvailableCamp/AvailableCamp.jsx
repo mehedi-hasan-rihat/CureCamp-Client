@@ -91,26 +91,32 @@ export default function AvailableCampsPage() {
           </button>
         </div>
       </div>
+{
+  camps.length < 1 ? <div className="flex justify-center items-center h-96">
+  <p className="text-lg font-semibold text-gray-500">
+    No data available
+  </p>
+</div> : 
+ <div className=""> <div
+ className={`grid-cols-1 xl:grid-cols-2  gap-7 ${
+   isTwoColumn ? "grid" : "hidden"
+ }`}
+>
+ {camps?.map((camp) => (
+   <AlternativeColum key={camp?._id} camp={camp} />
+ ))}
+</div>
 
-      <div
-        className={`grid-cols-1 xl:grid-cols-2  gap-7 ${
-          isTwoColumn ? "grid" : "hidden"
-        }`}
-      >
-        {camps?.map((camp) => (
-          <AlternativeColum key={camp?._id} camp={camp} />
-        ))}
-      </div>
-
-      <div
-        className={` ${
-          !isTwoColumn ? "grid" : "hidden"
-        } grid-cols-1 lg:grid-cols-2 xl:grid-cols-3  gap-7 `}
-      >
-        {camps?.map((camp) => (
-          <CampCard key={camp?._id} camp={camp} />
-        ))}
-      </div>
+<div
+ className={` ${
+   !isTwoColumn ? "grid" : "hidden"
+ } grid-cols-1 lg:grid-cols-2 xl:grid-cols-3  gap-7 `}
+>
+ {camps?.map((camp) => (
+   <CampCard key={camp?._id} camp={camp} />
+ ))}
+</div></div>
+}
     </Container>
   );
 }

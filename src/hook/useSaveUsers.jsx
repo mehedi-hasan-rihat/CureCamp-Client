@@ -1,19 +1,17 @@
+import axios from "axios";
 import useAxiosSecure from "./useAxiosSecure";
 
 export default function useSaveUsers() {
     const axiosSecure = useAxiosSecure();
-
+console.log(4);
     const saveUsers = async (user) => {
         const userData = {
             name: user?.displayName,
             email: user?.email,
             photoURL: user?.photoURL,
         };
-
-        console.log(userData);
-
         try {
-            const { data } = await axiosSecure.post('/users', userData);
+            const { data } = await axios.post(`${import.meta.env.VITE_URL}/users`, userData);
             console.log('User saved:', data);
             return data;
         } catch (error) {
