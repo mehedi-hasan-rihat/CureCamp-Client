@@ -140,8 +140,9 @@ export default function RegisteredCamps() {
       ) : (
         <div className="flex items-center justify-center h-full w-full">
           {" "}
-          <ScrollArea className="w-full max-h-[80vh] whitespace-nowrap rounded-md border">
-            <Table className="relative">
+          
+          <ScrollArea className="w-full h-[80vh]  rounded-md border">
+          <Table className="relative">
               <TableCaption className="mb-5">
                 A list of Registered campains.
               </TableCaption>
@@ -386,9 +387,9 @@ export default function RegisteredCamps() {
                   </TableCell>
                 </TableRow>
               </TableFooter>
-            </Table>{" "}
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+            </Table>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
         </div>
       )}
     </div>
