@@ -53,7 +53,7 @@ export default function SignUp() {
                     fill="currentColor"
                   />
                 </svg>
-              </>
+              </p>
 
               <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
               "Join Us Today!" 🦑
