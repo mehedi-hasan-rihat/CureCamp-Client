@@ -5,10 +5,12 @@ import { ImgURL } from "../utils/imgUpload";
 import useAuth from "../hook/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
+import useSaveUsers from "../hook/useSaveUsers";
 export default function SignIn() {
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate()
   const location = useLocation()
+  const saveUser = useSaveUsers()
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
     signIn(data.email, data.password).then((result) => {
@@ -111,8 +113,12 @@ export default function SignIn() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      signInWithGoogle()
+                    onClick={ async () => {
+                      const data = await signInWithGoogle()
+                      // console.log(data.user);
+                      // console.log(loading);
+                      saveUser(data.user).then(res => navigate('/'))
+                    
                     }}
                     className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
                   >
