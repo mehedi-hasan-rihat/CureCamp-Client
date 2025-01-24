@@ -37,12 +37,12 @@ export default function Footer() {
                 </Link>}
             </div>
             <div class="px-2 py-2">
-                <Link to='http://localhost:5173/auth/signin' class="text-base leading-6 text-white hover:text-gray-200 duration-150">
+                <Link to='/auth/signin' class="text-base leading-6 text-white hover:text-gray-200 duration-150">
                     SignIn
                 </Link>
             </div>
             <div class="px-2 py-2">
-                <Link to='http://localhost:5173/auth/signup' class="text-base leading-6 text-white hover:text-gray-200 duration-150">
+                <Link to='/auth/signup' class="text-base leading-6 text-white hover:text-gray-200 duration-150">
                    SignUp
                 </Link>
             </div>
