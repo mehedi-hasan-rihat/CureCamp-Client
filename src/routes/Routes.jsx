@@ -19,6 +19,7 @@ import Profile from "../pages/Dashboard/Profile";
 import AdminRoute from "./adminRoute";
 import PrivateRoute from "./PrivateRoute";
 import ErrorPage from "../pages/ErrorPage";
+import MyCamp from "../pages/MyCamp";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "/camp-details/:id",
         element: <CampDetails />,
+      },
+      {
+        path: "/my-camps",
+        element: <MyCamp/>,
       },
     ],
   },

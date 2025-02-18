@@ -5,16 +5,16 @@ export default function Donation() {
   return (
     <Container>
     
- <div className=" my-32 ">
+ <div className=" my-32 shadow-xl shadow-gray-200/50 px-10 md:px-20 rounded-2xl py-12 border border-gray-200/70 bg-white/20">
 
 
- <h2 className="text-center text-3xl titan text-black">📌 Donate now and be a part of this noble cause!
+ <h2 className="text-center text-4xl pb-12  font-semibold"> Donate now and be a part of this noble cause!
 
 </h2>
- <div className="flex flex-col md:flex-row shadow-xl shadow-gray-200/50 px-10 md:px-20 rounded-2xl py-12 bg-white/20">
+ <div className="flex flex-col md:flex-row">
       
-      <div className="flex-1">
-        <h4 className="text-4xl font-semibold titan max-w-xl leading-snug text-gray-800">
+      <div className="w-[40%]">
+        <h4 className="text-3xl max-w-xl leading-snug text-gray-800">
           Your Donation will help level up the lives of people in need
         </h4>
       </div>
@@ -32,7 +32,7 @@ export default function Donation() {
             Donate Now
           </span>
 
-          <span className="shrink-0 rounded-full border border-current bg-white p-2 text-blue-600 transition-all group-hover:scale-110">
+          <span className="shrink-0 rounded-full border border-current bg-white p-2 text-blue-600 transition-all group-hover:scale-105">
             <svg
               className="size-4 -rotate-45 group-hover:rotate-0 duration-300"
               xmlns="http://www.w3.org/2000/svg"

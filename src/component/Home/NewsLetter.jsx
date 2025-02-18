@@ -4,7 +4,7 @@ import Container from "../sharedComponent/Container";
 export default function NewsLetter() {
   return (
     <Container>
-      <div className="flex items-center justify-center pr-32 ">
+      <div className="flex items-center justify-center pr-32 border border-gray-200/70 shadow-sm rounded-lg py-12">
         <div className="w-full flex justify-center">
           <img
             src="https://static.live.templately.com/woocommerce/2022/12/6f62efd8-funzone-sub-img.png"

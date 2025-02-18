@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import NewsLetter from '../component/Home/NewsLetter'
 import Donation from '../component/Home/Donation'
 import RecentWork from '../component/Home/RecentWork'
+import Contact from '../component/Home/Contact'
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
      <FAQ/>
      <RecentWork/>
      <Donation/>
+     <Contact/>
      <NewsLetter/>
   
    </div>
