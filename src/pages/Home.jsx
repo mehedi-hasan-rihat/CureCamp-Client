@@ -4,6 +4,8 @@ import PopularCamp from '../component/Home/PopularCamp'
 import Review from '../component/Home/Review'
 import FAQ from '../component/Home/FAQ'
 import { Helmet } from 'react-helmet-async';
+import NewsLetter from '../component/Home/NewsLetter'
+import Donation from '../component/Home/Donation'
 
 export default function Home() {
   return (
@@ -12,7 +14,11 @@ export default function Home() {
      <Hero/>
      <PopularCamp/>
      <Review/>
+     
      <FAQ/>
+     <Donation/>
+     <NewsLetter/>
+  
    </div>
   )
 }
