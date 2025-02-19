@@ -49,24 +49,24 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li>
-                <NavLink
+              {user &&   <NavLink
                   to="/my-camps"
                   className={({ isActive }) =>
                     `p-1 ${isActive ? "text-white text-lg duration-300 font-bold" : "text-white opacity-80 hover:opacity-100 transition-all ease-in-out"}`
                   }
                 >
                   My Camps
-                </NavLink>
+                </NavLink>}
               </li>
               <li>
-                <NavLink
-                  to="/profile"
+             {user &&    <NavLink
+                  to="/dashboard/profile"
                   className={({ isActive }) =>
                     `p-1 ${isActive ? "text-white text-lg duration-300 font-bold" : "text-white opacity-80 hover:opacity-100 transition-all ease-in-out"}`
                   }
                 >
                   Profile
-                </NavLink>
+                </NavLink>}
               </li>
               <li>
                 <NavLink

@@ -20,6 +20,7 @@ import AdminRoute from "./adminRoute";
 import PrivateRoute from "./PrivateRoute";
 import ErrorPage from "../pages/ErrorPage";
 import MyCamp from "../pages/MyCamp";
+import About from "../pages/About";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/my-camps",
         element: <MyCamp/>,
+      },
+      {
+        path: "/about-us",
+        element: <About/>,
       },
     ],
   },
