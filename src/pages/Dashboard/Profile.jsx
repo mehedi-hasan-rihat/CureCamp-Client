@@ -63,7 +63,7 @@ export default function MyProfile() {
               <div className="-mt-12">
                 <img
                   className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
-                  src={userData?.photoURL}
+                  src={user?.photoURL}
                   alt="Profile"
                   referrerPolicy="no-referrer"
                 />
