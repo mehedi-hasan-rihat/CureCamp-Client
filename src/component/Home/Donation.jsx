@@ -1,5 +1,6 @@
 import React from "react";
 import Container from "../sharedComponent/Container";
+import toast from "react-hot-toast";
 
 export default function Donation() {
   return (
@@ -27,7 +28,9 @@ export default function Donation() {
           communities. Join us in bringing hope and healing!
         </p>
 
-        <div className="w-max group cursor-pointer flex items-center justify-between gap-2 rounded-full border border-blue-600 bg-blue-600 px-4 py-[2px] transition-all hover:bg-transparent hover:shadow-lg focus:outline-none focus:ring shadow-md">
+        <div onClick={()=> {
+          toast("Donation is curently Unavaiable")
+        }} className="w-max group cursor-pointer flex items-center justify-between gap-2 rounded-full border border-blue-600 bg-blue-600 px-4 py-[2px] transition-all hover:bg-transparent hover:shadow-lg focus:outline-none focus:ring shadow-md">
           <span className="font-medium font-poppins text-white transition-colors group-hover:text-blue-600 titan">
             Donate Now
           </span>

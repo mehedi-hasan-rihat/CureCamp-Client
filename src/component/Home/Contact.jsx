@@ -2,6 +2,7 @@ import React from "react";
 import Container from "../sharedComponent/Container";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"
+import toast from "react-hot-toast";
 export default function Contact() {
   return (
     <Container>
@@ -17,7 +18,9 @@ export default function Contact() {
           </div>
           <Input type="text" placeholder="Your Address..."/>
           <Textarea placeholder="Type your message here..." />
-          <button type="button" className="px-4 py-2 bg-[#6756FF] text-white rounded">Submit</button>
+          <button type="button" className="px-4 py-2 bg-[#6756FF] text-white rounded" onClick={()=> {
+          toast("Thaks for your time")
+        }}>Submit</button>
         </div>
       </div>
     </Container>

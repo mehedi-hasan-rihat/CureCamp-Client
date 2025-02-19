@@ -1,5 +1,6 @@
 import React from "react";
 import Container from "../sharedComponent/Container";
+import toast from "react-hot-toast";
 
 export default function NewsLetter() {
   return (
@@ -20,7 +21,9 @@ export default function NewsLetter() {
           </p>
          <div className="relative max-w-md mt-2">
          <input className="px-4 py-3 w-full rounded-full bg-[#deddff] placeholder:text-black placeholder:font-semibold outline-none font-semibold" type="email" placeholder="Enter Your Email" />
-         <button className=" px-5 uppercase py-2 bg-[#6756ff] text-white font-semibold rounded-full absolute left-[50%] bottom-1">Subscribe</button>
+         <button onClick={()=> {
+          toast("Thanks For your subscribtion")
+        }} className=" px-5 uppercase py-2 bg-[#6756ff] text-white font-semibold rounded-full absolute left-[50%] bottom-1">Subscribe</button>
          </div>
         </div>
       </div>
