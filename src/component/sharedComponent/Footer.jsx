@@ -7,7 +7,7 @@ export default function Footer() {
   console.log(role);
   return (
 
-<section className=" bg-[#1D1568]">
+<section className=" bg-[#6A61F7]">
     <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
         <nav className="flex flex-wrap items-center justify-center -mx-5 -my-2">
             <div className="px-5 py-2">
