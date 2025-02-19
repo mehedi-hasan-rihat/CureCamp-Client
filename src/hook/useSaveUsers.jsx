@@ -1,9 +1,6 @@
 import axios from "axios";
-import useAxiosSecure from "./useAxiosSecure";
 
 export default function useSaveUsers() {
-    const axiosSecure = useAxiosSecure();
-console.log(4);
     const saveUsers = async (user) => {
         const userData = {
             name: user?.displayName,
