@@ -115,7 +115,7 @@ export default function StripeForm({ camp, setIsOpen, refetch }) {
           className="text-white"
           type="submit"
           disabled={!stripe || !clientSecret || processing}
-        >{`Pay :  ${10}`}</Button>
+        >Pay</Button>
 
        
           <Button onClick ={() => {
