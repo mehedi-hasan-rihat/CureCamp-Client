@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import {
   Table,
@@ -92,7 +90,7 @@ export default function RegisteredCamps() {
   };
 
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
-
+console.log(import.meta.env.VITE_STRIPE_KEY);
   const handleRatingChange = (newRating) => {
     setRating(newRating);
   };
