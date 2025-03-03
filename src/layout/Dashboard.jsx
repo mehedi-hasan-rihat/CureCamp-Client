@@ -100,7 +100,7 @@ const Dashboard = () => {
         </div>
 
         {/* Page Content */}
-        <div className="p-5 md:ml-64 ">
+        <div className="py-5  md:ml-64 ">
           <Outlet />
         </div>
       </div>
