@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Container from "./Container";
 import { Button } from "@/components/ui/button";
@@ -19,29 +19,29 @@ export default function Navbar() {
 
   return (
     <Container>
-      <nav className="sticky top-0 px-4 py-3 flex justify-between items-center">
+      <nav className="sticky top-0 flex items-center justify-between px-4 py-3">
         {/* Logo */}
        
-       <div className="hidden md:block"> <div className="flex gap-2 items-center ">
+       <div className="hidden md:block"> <div className="flex items-center gap-2 ">
           <img
             src="https://i.ibb.co.com/t25qYcW/DALL-E-2025-01-14-10-50-58-A-sleek-and-modern-logo-design-with-no-text-featuring-a-minimalist-medica.webp"
             alt="logo"
-            className="w-9 h-9 rounded-full"
+            className="rounded-full w-9 h-9"
           />
-          <p className="hidden sm:block sm:text-xl font-semibold text-white">CureCamp</p>
+          <p className="hidden font-semibold text-white sm:block sm:text-xl">CureCamp</p>
         </div></div>
 
         {/* Mobile Menu Button */}
         <button
-          className="block md:hidden text-white"
+          className="block text-white md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
 
         {/* Navigation Links (Desktop) */}
-        <div className="hidden md:flex items-center gap-8">
-          <ul className="flex gap-4 text-sm md:text-base items-center">
+        <div className="items-center hidden gap-8 md:flex">
+          <ul className="flex items-center gap-4 text-sm md:text-base">
             <li>
               <NavLink
                 to="/"
@@ -110,7 +110,7 @@ export default function Navbar() {
                 className="w-10 ring-2 ring-[#cd07f5] h-10 rounded-full object-center object-cover hover:scale-105 transition-transform"
               />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-60 mr-3 font-semibold">
+            <DropdownMenuContent className="mr-3 font-semibold w-60">
               <DropdownMenuLabel>
                 <div className="text-center">
                   <img

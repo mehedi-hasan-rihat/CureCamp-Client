@@ -8,7 +8,6 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import React from "react";
 import auth from "../Firebase/FirebaseInit";
 import useAxiosPublic from "../hook/useAxiosPublic";
 export const AuthContext = createContext(null);
